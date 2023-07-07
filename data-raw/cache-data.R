@@ -56,7 +56,7 @@ cross_channel_stray_rate <- c(1, 2, 2, 0, 1, 2, 2, 1, 0, 2, 0, 2, 0, 0, 1, 0, 0,
 names(cross_channel_stray_rate) <- watershed_labels
 usethis::use_data(cross_channel_stray_rate, overwrite = TRUE)
 
-stray_rate <- c(1, 2, 2, 0, 1, 2, 2, 1, 0, 2, 0, 2, 0, 0, 1, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0)/26
+stray_rate <- c(1, 2, 2, 0, 1, 2, 2, 1, 0, 2, 0, 2, 0, 0, 1, 0, 0, 0, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1)/26
 names(stray_rate) <- watershed_labels
 usethis::use_data(stray_rate, overwrite = TRUE)
 
