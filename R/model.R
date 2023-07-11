@@ -220,7 +220,7 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                              ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
                                              .deg_day = ..params$.adult_prespawn_deg_day)
     # R2R logic to add fish size as an input -----------------------------------
-    hatch_adults <- if (year %in% c(1:6)) {
+    if (year %in% c(1:6)) {
       hatch_age_dist <- dplyr::tibble(watershed = fallRunDSM::watershed_labels,
                                prop_2 = rep(.3, 31),
                                prop_3 = rep(.6, 31),
@@ -1066,6 +1066,8 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     # distribute returning adults for future spawning
     if (mode == "calibrate") {
       calculated_adults[1:31, (year + 1):(year + 4)] <- calculated_adults[1:31, (year + 1):(year + 4)] + natural_adults_returning
+      calculated_adults[1:31, (year + 1):(year + 3)] <- calculated_adults[1:31, (year + 1):(year + 3)] + hatchery_adults_returning
+      
     } else {
       adults[1:31, (year + 1):(year + 4)] <- adults[1:31, (year + 1):(year + 4)] + natural_adults_returning
     }
