@@ -16,7 +16,7 @@
 #'                            seeds = spring_run_seeds)
 #' @export
 spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "calibrate"),
-                             seeds = NULL, ..params = springRunDSM::params, stochastic = FALSE){
+                             seeds = NULL, ..params = springRunDSM::r_to_r_baseline_params, stochastic = FALSE){
   
   mode <- match.arg(mode)
   

@@ -9,7 +9,7 @@ names(x) <- NULL
 
 r_to_r_baseline_params <- list(
   #TODO add updated spawn decay multiplier for 2019 biop
-  # spawn_decay_multiplier = DSMhabitat::spawning_decay_multiplier$2019_biop,
+  spawn_decay_multiplier = DSMhabitat::spawning_decay_multiplier,
   
   # Data from DSMscenarios
   spawn_decay_rate = DSMscenario::spawn_decay_rate,
