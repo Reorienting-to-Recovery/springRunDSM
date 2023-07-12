@@ -1,6 +1,9 @@
 library(tidyverse)
-remotes::install_github("Reorienting-to-Recovery/DSMhabitat")
+remotes::install_github("Reorienting-to-Recovery/DSMhabitat@add-san-joaquin", force = TRUE)
 library(DSMhabitat)
+remotes::install_github("Reorienting-to-Recovery/DSMtemperature", force = TRUE)
+library(DSMtemperature)
+
 
 calibration_solution <- read_rds("calibration/calibration-results-2022.rds")
 
@@ -41,11 +44,11 @@ r_to_r_baseline_params <- list(
   # DSMtemperature variables -----
   vernalis_temps = DSMtemperature::vernalis_temperature,
   prisoners_point_temps = DSMtemperature::prisoners_point_temperature,
-  degree_days = DSMtemperature::degree_days$biop_itp_2018_2019,
+  degree_days = DSMtemperature::degree_days_sr$biop_itp_2018_2019,
   mean_egg_temp_effect = DSMtemperature::egg_temperature_effect$spring_run,
   avg_temp = DSMtemperature::stream_temperature$biop_itp_2018_2019,
   avg_temp_delta = DSMtemperature::delta_temperature,
-  migratory_temperature_proportion_over_20 = DSMtemperature::migratory_temperature_proportion_over_20,
+  migratory_temperature_proportion_over_20 = DSMtemperature::migratory_temperature_proportion_over_20_sr,
   
   # DSMhabitat variables -----
   spawning_habitat = DSMhabitat::sr_spawn$r_to_r_baseline,
@@ -58,7 +61,7 @@ r_to_r_baseline_params <- list(
   yolo_habitat = DSMhabitat::yolo_habitat$biop_itp_2018_2019,
   tisdale_bypass_watershed = DSMhabitat::tisdale_bypass_watershed,
   yolo_bypass_watershed = DSMhabitat::yolo_bypass_watershed,
-  south_delta_routed_watersheds = DSMhabitat::south_delta_routed_watersheds,
+  south_delta_routed_watersheds = DSMhabitat::spring_south_delta_routed_watersheds,
   prop_high_predation = DSMhabitat::prop_high_predation,
   contact_points = DSMhabitat::contact_points,
   delta_contact_points = DSMhabitat::delta_contact_points,

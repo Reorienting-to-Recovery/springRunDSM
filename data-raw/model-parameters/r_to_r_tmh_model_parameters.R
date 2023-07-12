@@ -1,7 +1,7 @@
 library(tidyverse)
 remotes::install_github("Reorienting-to-Recovery/DSMhabitat", ref = "add-san-joaquin", force = TRUE)
 library(DSMhabitat)
-remotes::install_github("Reorienting-to-Recovery/DSMtemperature", ref = "update-spring-run-params", force = TRUE)
+remotes::install_github("Reorienting-to-Recovery/DSMtemperature", force = TRUE)
 library(DSMtemperature)
 
 calibration_solution <- read_rds("calibration/calibration-results-2022.rds")
