@@ -58,7 +58,7 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
   simulation_length <- switch(mode,
                               "seed" = 5,
                               "simulate" = 20,
-                              "calibrate" = 20)
+                              "calibrate" = 19)
   
   output <- list(
     
