@@ -20,7 +20,7 @@ no_sr_spawn <- !as.logical(DSMhabitat::watershed_species_present[1:31, ]$sr *
                              DSMhabitat::watershed_species_present[1:31,]$spawn)
 
 adult_seed_values <- DSMCalibrationData::mean_escapement_2013_2017 %>% 
-  mutate(Spring = case_when(watershed == "San Joaquin River" ~ 51)) |> 
+  mutate(Spring = ifelse(watershed == "San Joaquin River", 51, Spring)) |> 
   bind_cols(no_sr_spawn = no_sr_spawn) %>%
   select(watershed, Spring, no_sr_spawn) %>%
   mutate(corrected_spring = case_when(
