@@ -221,11 +221,11 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                              .deg_day = ..params$.adult_prespawn_deg_day)
     # R2R logic to add fish size as an input -----------------------------------
     if (year %in% c(1:6)) {
-      hatch_age_dist <- dplyr::tibble(watershed = fallRunDSM::watershed_labels,
+      hatch_age_dist <- dplyr::tibble(watershed = springRunDSM::watershed_labels,
                                prop_2 = rep(.3, 31),
                                prop_3 = rep(.6, 31),
                                prop_4 = rep(.1, 31))
-      natural_age_dist <- dplyr::tibble(watershed = fallRunDSM::watershed_labels,
+      natural_age_dist <- dplyr::tibble(watershed = springRunDSM::watershed_labels,
                                  prop_2 = rep(.22, 31),
                                  prop_3 = rep(.47, 31),
                                  prop_4 = rep(.26, 31),
