@@ -96,7 +96,7 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     upper_mid_sac_fish <- matrix(0, nrow = 15, ncol = 4, dimnames = list(springRunDSM::watershed_labels[1:15], springRunDSM::size_class_labels))
     sutter_fish <- matrix(0, nrow = 15, ncol = 4, dimnames = list(springRunDSM::watershed_labels[1:15], springRunDSM::size_class_labels))
     yolo_fish <- matrix(0, nrow = 20, ncol = 4, dimnames = list(springRunDSM::watershed_labels[1:20], springRunDSM::size_class_labels))
-    san_joaquin_fish <- matrix(0, nrow = 3, ncol = 4, dimnames = list(springRunDSM::watershed_labels[28:30], springRunDSM::size_class_labels))
+    san_joaquin_fish <- matrix(0, nrow = 4, ncol = 4, dimnames = list(springRunDSM::watershed_labels[28:31], springRunDSM::size_class_labels))
     north_delta_fish <- matrix(0, nrow = 23, ncol = 4, dimnames = list(springRunDSM::watershed_labels[1:23], springRunDSM::size_class_labels))
     south_delta_fish <- matrix(0, nrow = 31, ncol = 4, dimnames = list(springRunDSM::watershed_labels, springRunDSM::size_class_labels))
     juveniles_at_chipps <- matrix(0, nrow = 31, ncol = 4, dimnames = list(springRunDSM::watershed_labels, springRunDSM::size_class_labels))
@@ -417,8 +417,8 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
         
         lower_sac_fish <- migrate(lower_sac_fish + migrants[1:27, ], migratory_survival$lower_sac, stochastic = stochastic)
         
-        san_joaquin_fish <- migrate(migrants[28:30, ] + san_joaquin_fish, migratory_survival$san_joaquin, stochastic = stochastic)
-        migrants[28:30, ] <- san_joaquin_fish
+        san_joaquin_fish <- migrate(migrants[28:31, ] + san_joaquin_fish, migratory_survival$san_joaquin, stochastic = stochastic)
+        migrants[28:31, ] <- san_joaquin_fish
         
         delta_fish <- route_and_rear_deltas(year = juv_dynamics_year, month = month,
                                             migrants = round(migrants),
@@ -914,10 +914,10 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
         
         san_joaquin_trib_fish <- route(year = juv_dynamics_year,
                                        month = month,
-                                       juveniles = juveniles[28:30, ],
-                                       inchannel_habitat = habitat$inchannel[28:30],
-                                       floodplain_habitat = habitat$floodplain[28:30],
-                                       prop_pulse_flows =  ..params$prop_pulse_flows[28:30, ],
+                                       juveniles = juveniles[28:31, ],
+                                       inchannel_habitat = habitat$inchannel[28:31],
+                                       floodplain_habitat = habitat$floodplain[28:31],
+                                       prop_pulse_flows =  ..params$prop_pulse_flows[28:31, ],
                                        .pulse_movement_intercept = ..params$.pulse_movement_intercept,
                                        .pulse_movement_proportion_pulse = ..params$.pulse_movement_proportion_pulse,
                                        .pulse_movement_medium = ..params$.pulse_movement_medium,
@@ -930,15 +930,15 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                        stochastic = stochastic)
         
         san_joaquin_trib_rear <- rear(juveniles = san_joaquin_trib_fish$inchannel,
-                                      survival_rate = rearing_survival$inchannel[28:30, ],
-                                      growth = growth_rates_ic[,,28:30],
+                                      survival_rate = rearing_survival$inchannel[28:31, ],
+                                      growth = growth_rates_ic[,,28:31],
                                       floodplain_juveniles = san_joaquin_trib_fish$floodplain,
-                                      floodplain_survival_rate = rearing_survival$floodplain[28:30, ],
-                                      floodplain_growth = growth_rates_fp[,,28:30],
-                                      weeks_flooded = ..params$weeks_flooded[28:30, month, juv_dynamics_year],
+                                      floodplain_survival_rate = rearing_survival$floodplain[28:31, ],
+                                      floodplain_growth = growth_rates_fp[,,28:31],
+                                      weeks_flooded = ..params$weeks_flooded[28:31, month, juv_dynamics_year],
                                       stochastic = stochastic)
         
-        juveniles[28:30, ] <- san_joaquin_trib_rear$inchannel + san_joaquin_trib_rear$floodplain
+        juveniles[28:31, ] <- san_joaquin_trib_rear$inchannel + san_joaquin_trib_rear$floodplain
         
         san_joaquin_fish <- route_regional(month = month,
                                            year = juv_dynamics_year,
@@ -950,7 +950,7 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                            territory_size = ..params$territory_size,
                                            stochastic = stochastic)
         
-        migrants[28:30, ] <- san_joaquin_fish$migrants
+        migrants[28:31, ] <- san_joaquin_fish$migrants
         
         san_joaquin_fish <- rear(juveniles = san_joaquin_fish$inchannel,
                                  survival_rate = rearing_survival$inchannel[31, ],
