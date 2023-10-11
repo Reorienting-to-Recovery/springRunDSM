@@ -139,6 +139,7 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                     .adult_en_route_bypass_overtopped = ..params$.adult_en_route_bypass_overtopped,
                                     .adult_en_route_adult_harvest_rate = ..params$.adult_en_route_adult_harvest_rate,
                                     stochastic = stochastic)
+    # TODO: use above_dam_spawn_hab_prop_sr to get proportion of above and below dam spawners 
     
     init_adults <- spawners$init_adults
     
@@ -187,17 +188,32 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                      may = rowSums(..params$degree_days[ , 5:6, year]),
                                      june = ..params$degree_days[ , 6, year])
     
+    # TODO add degree days calculated with  a maximum threshold of 17 for above dam 
     average_degree_days <- apply(accumulated_degree_days, 1, weighted.mean, ..params$month_return_proportions)
+    average_degree_days_abv_dam <- apply(cbind(march = rowSums(..params$degree_days_abv_dam[ , 3:6, year]),
+                                               april = rowSums(..params$degree_days_abv_dam[ , 4:6, year]),
+                                               may = rowSums(..params$degree_days_abv_dam[ , 5:6, year]),
+                                               june = ..params$degree_days_abv_dam[ , 6, year]), 1, weighted.mean, ..params$month_return_proportions)
     
+    # TODO: is this where we want to do the split of above and below dam?
+    # above and below prespawn
     prespawn_survival <- surv_adult_prespawn(average_degree_days,
                                              ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
                                              .deg_day = ..params$.adult_prespawn_deg_day)
     
+    prespawn_survival_abv_dam <- surv_adult_prespawn(average_degree_days_abv_dam,
+                                             ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
+                                             .deg_day = ..params$.adult_prespawn_deg_day)
+    
     # Apply SR pools logic
+    # TODO R2R: init adults would be split into above and below dam and apply prespawn separately and 
+    # then add them back together 
     init_adults <- if (stochastic) {
-      rbinom(31, round(init_adults), prespawn_survival)
+      rbinom(31, round(init_adults), prespawn_survival) 
     } else {
-      round(init_adults * prespawn_survival)
+      blw_dam <- round((1 - ..params$above_dam_spawn_proportion) * init_adults * prespawn_survival, 0) 
+      abv_dam <- round(..params$above_dam_spawn_proportion * init_adults * prespawn_survival_abv_dam, 0)
+      blw_dam + abv_dam
     }
     
     # spring run above capacity die, capacity based on spring run pools
