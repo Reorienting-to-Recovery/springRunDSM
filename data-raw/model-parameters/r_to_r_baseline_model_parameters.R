@@ -46,7 +46,7 @@ r_to_r_baseline_params <- list(
   vernalis_temps = DSMtemperature::vernalis_temperature,
   prisoners_point_temps = DSMtemperature::prisoners_point_temperature,
   degree_days = DSMtemperature::degree_days_sr$biop_itp_2018_2019,
-  degree_days_abv_dam =  DSMtemperature::degree_days_sr_abv_dam$biop_itp_2018_2019, # R2R: updated degree days for above dam
+  degree_days_abv_dam =  DSMtemperature::degree_days_sr_abv_dam$biop_itp_2018_2019, # R2R: updated degree days for above dam to 13C threshold above dam
   mean_egg_temp_effect = DSMtemperature::egg_temperature_effect$spring_run,
   avg_temp = DSMtemperature::stream_temperature$biop_itp_2018_2019,
   avg_temp_delta = DSMtemperature::delta_temperature,

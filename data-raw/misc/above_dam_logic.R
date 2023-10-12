@@ -19,8 +19,12 @@ new_results <- spring_run_model(scenario = DSMscenario::scenarios$ONE,
 
 new_results$spawners == before_mods$spawners
 
+x <- surv_adult_prespawn(c(-5000:5000), r_to_r_baseline_params$..surv_adult_prespawn_int, 
+                    .deg_day = r_to_r_baseline_params$.adult_prespawn_deg_day)
+
+qplot(x = c(-5000:5000), y = x)
+
 # plots -------------------------------------------------------------------
-library(producePMs)
 library(tidyverse)
 spawning_watersheds <- c(DSMhabitat::watershed_species_present %>%
   filter(!(watershed_name %in% c("Upper Sacramento River", "Upper Mid Sac Region")),
@@ -52,7 +56,7 @@ after_mods_tidy |>
   bind_rows(before_mods_tidy) |> 
 ggplot() + 
   geom_line(aes(x = year, y = value, color = scenario)) +
-  facet_wrap(~location) +
+  facet_wrap(~location, scales = "free_y") +
   ggtitle("above dam proportion applied; temperature above dam never exceeds 13C") +
   ylab("spawners") 
 
@@ -68,11 +72,14 @@ after_mods_tidy_juv <- dplyr::as_tibble(new_results$juveniles) |>
 
 before_mods_tidy_juv |> 
   bind_rows(after_mods_tidy_juv) |> 
+  filter(watershed == "Feather River" & size == "s") |> 
 ggplot() + 
   geom_line(aes(x = year, y = juveniles, color = scenario, linetype = size)) +
-  facet_wrap(~watershed) +
+  facet_wrap(~watershed,  scales = "free_y") +
   ggtitle("above dam proportion applied; temperature above dam never exceeds 13C") +
   ylab("juveniles") 
 
 ggsave(filename = "data-raw/misc/juvs_with_above_dam_logic_applied.png", plot = last_plot(), 
        width = 10, height = 8)
+
+

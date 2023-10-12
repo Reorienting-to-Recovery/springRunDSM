@@ -188,7 +188,6 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                      may = rowSums(..params$degree_days[ , 5:6, year]),
                                      june = ..params$degree_days[ , 6, year])
     
-    # TODO add degree days calculated with  a maximum threshold of 17 for above dam 
     average_degree_days <- apply(accumulated_degree_days, 1, weighted.mean, ..params$month_return_proportions)
     average_degree_days_abv_dam <- apply(cbind(march = rowSums(..params$degree_days_abv_dam[ , 3:6, year]),
                                                april = rowSums(..params$degree_days_abv_dam[ , 4:6, year]),
@@ -229,9 +228,11 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
       init_adults * 0.5 / (init_adults + 0.00000001)
     }
     
+    # TODO: add abv dam logic 
     average_degree_days <- rowSums(..params$degree_days[ , 7:10, year]) * (1 - holding_split) + 
       rowSums(..params$degree_days[ , 7:9, year]) * holding_split
     
+    # TODO: add abv dam logic 
     prespawn_survival <- surv_adult_prespawn(average_degree_days,
                                              ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
                                              .deg_day = ..params$.adult_prespawn_deg_day)
@@ -283,7 +284,7 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                hatchery_age_distribution = hatch_age_dist, # R2R ADDS NEW PARAM
                                natural_age_distribution = natural_age_dist, # R2R ADDS NEW PARAM
                                fecundity_lookup = ..params$fecundity_lookup, # R2R ADDS NEW PARAM
-                               adult_prespawn_survival = prespawn_survival,
+                               adult_prespawn_survival = prespawn_survival, # TODO: add abv dam logic here?
                                egg_to_fry_survival = egg_to_fry_surv,
                                prob_scour = ..params$prob_nest_scoured,
                                spawn_habitat = min_spawn_habitat,
