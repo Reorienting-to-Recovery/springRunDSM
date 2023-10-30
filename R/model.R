@@ -189,26 +189,29 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                      june = ..params$degree_days[ , 6, year])
     
     average_degree_days <- apply(accumulated_degree_days, 1, weighted.mean, ..params$month_return_proportions)
+    
+    # R2R: above and below degree days
     average_degree_days_abv_dam <- apply(cbind(march = rowSums(..params$degree_days_abv_dam[ , 3:6, year]),
                                                april = rowSums(..params$degree_days_abv_dam[ , 4:6, year]),
                                                may = rowSums(..params$degree_days_abv_dam[ , 5:6, year]),
                                                june = ..params$degree_days_abv_dam[ , 6, year]), 1, weighted.mean, ..params$month_return_proportions)
     
-    # TODO: is this where we want to do the split of above and below dam?
-    # above and below prespawn
+    
     prespawn_survival <- surv_adult_prespawn(average_degree_days,
                                              ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
                                              .deg_day = ..params$.adult_prespawn_deg_day)
-    
+    # R2R: above and below prespawn
     prespawn_survival_abv_dam <- surv_adult_prespawn(average_degree_days_abv_dam,
                                              ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
                                              .deg_day = ..params$.adult_prespawn_deg_day)
     
     # Apply SR pools logic
-    # TODO R2R: init adults would be split into above and below dam and apply prespawn separately and 
+    # R2R: init adults split into above and below dam and apply prespawn separately and 
     # then add them back together 
     init_adults <- if (stochastic) {
-      rbinom(31, round(init_adults), prespawn_survival) 
+      blw_dam <- rbinom(31, round(init_adults), (prespawn_survival * (1 - ..params$above_dam_spawn_proportion))) 
+      abv_dam <- rbinom(31, round(init_adults), (prespawn_survival * ..params$above_dam_spawn_proportion))
+      blw_dam + abv_dam
     } else {
       blw_dam <- round((1 - ..params$above_dam_spawn_proportion) * init_adults * prespawn_survival, 0) 
       abv_dam <- round(..params$above_dam_spawn_proportion * init_adults * prespawn_survival_abv_dam, 0)
@@ -228,14 +231,22 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
       init_adults * 0.5 / (init_adults + 0.00000001)
     }
     
-    # TODO: add abv dam logic 
     average_degree_days <- rowSums(..params$degree_days[ , 7:10, year]) * (1 - holding_split) + 
       rowSums(..params$degree_days[ , 7:9, year]) * holding_split
     
-    # TODO: add abv dam logic 
+    # R2R: abv dam degree days
+    average_degree_days_abv_dam <- rowSums(..params$degree_days_abv_dam[ , 7:10, year]) * (1 - holding_split) + 
+      rowSums(..params$degree_days[ , 7:9, year]) * holding_split
+    
     prespawn_survival <- surv_adult_prespawn(average_degree_days,
                                              ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
                                              .deg_day = ..params$.adult_prespawn_deg_day)
+    
+    # R2R: abv dam prespawn survival
+    prespawn_survival_abv_dam <- surv_adult_prespawn(average_degree_days_abv_dam,
+                                             ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
+                                             .deg_day = ..params$.adult_prespawn_deg_day)
+    
     # R2R logic to add fish size as an input -----------------------------------
     if (year %in% c(1:6)) {
       hatch_age_dist <- dplyr::tibble(watershed = springRunDSM::watershed_labels,
@@ -284,7 +295,9 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
                                hatchery_age_distribution = hatch_age_dist, # R2R ADDS NEW PARAM
                                natural_age_distribution = natural_age_dist, # R2R ADDS NEW PARAM
                                fecundity_lookup = ..params$fecundity_lookup, # R2R ADDS NEW PARAM
-                               adult_prespawn_survival = prespawn_survival, # TODO: add abv dam logic here?
+                               adult_prespawn_survival = prespawn_survival, 
+                               adult_prespawn_survival_abv_dam = prespawn_survival_abv_dam, # R2R: ADDS NEW PARAM for abv dam
+                               abv_dam_spawn_proportion = ..params$above_dam_spawn_proportion, # R2R: ADDS NEW PARAM for abv dam
                                egg_to_fry_survival = egg_to_fry_surv,
                                prob_scour = ..params$prob_nest_scoured,
                                spawn_habitat = min_spawn_habitat,
