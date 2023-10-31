@@ -1,12 +1,11 @@
 library(tidyverse)
-remotes::install_github("Reorienting-to-Recovery/DSMhabitat@above_dam_logic", force = TRUE)
+remotes::install_github("Reorienting-to-Recovery/DSMhabitat@r2r-main", force = TRUE)
 library(DSMhabitat)
 remotes::install_github("Reorienting-to-Recovery/DSMtemperature@update_for_above_dam", force = TRUE)
 library(DSMtemperature)
 
 
-#calibration_solution <- read_rds("calibration/result-3-2023-07-13.rds")
-calibration_solution <- read_rds("calibration/result-22023-07-13.rds") # TODO: switch to above when I get the file 
+calibration_solution <- read_rds("calibration/result-3-2023-07-13.rds")
 
 x <- calibration_solution@solution[1,]
 names(x) <- NULL

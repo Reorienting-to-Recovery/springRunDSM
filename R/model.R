@@ -236,7 +236,7 @@ spring_run_model <- function(scenario = NULL, mode = c("seed", "simulate", "cali
     
     # R2R: abv dam degree days
     average_degree_days_abv_dam <- rowSums(..params$degree_days_abv_dam[ , 7:10, year]) * (1 - holding_split) + 
-      rowSums(..params$degree_days[ , 7:9, year]) * holding_split
+      rowSums(..params$degree_days_abv_dam[ , 7:9, year]) * holding_split
     
     prespawn_survival <- surv_adult_prespawn(average_degree_days,
                                              ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
