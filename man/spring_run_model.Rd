@@ -11,8 +11,9 @@ spring_run_model(
   scenario = NULL,
   mode = c("seed", "simulate", "calibrate"),
   seeds = NULL,
-  ..params = springRunDSM::params,
-  stochastic = FALSE
+  ..params = springRunDSM::r_to_r_baseline_params,
+  stochastic = FALSE,
+  delta_surv_inflation = FALSE
 )
 }
 \arguments{
@@ -24,12 +25,12 @@ spring_run_model(
 returning a 31 by 25 matrix with the first four years of seeded adults. This
 returned value can be fed into the model again as the value for the seeds argument}
 
-\item{..params}{Parameters for model and submodels. Defaults to \code{fallRunDSM::\code{\link{params}}}.}
+\item{..params}{Parameters for model and submodels. Defaults to \code{springRunDSM::\code{\link{params}}}.}
 
 \item{stochastic}{\code{TRUE} \code{FALSE} value indicating if model should be run stochastically. Defaults to \code{FALSE}.}
 }
 \description{
-Spring Run Chinook life cycle model used for CVPIA's Structured
+Spring Run Chinook life cycle model used for Reorienting to Recovery's Structured
 Decision Making Process
 }
 \examples{

@@ -22,12 +22,10 @@ surv_juv_rear(
   .surv_juv_rear_contact_points = springRunDSM::params$.surv_juv_rear_contact_points,
   ..surv_juv_rear_contact_points = springRunDSM::params$..surv_juv_rear_contact_points,
   .surv_juv_rear_prop_diversions = springRunDSM::params$.surv_juv_rear_prop_diversions,
- 
-    ..surv_juv_rear_prop_diversions = springRunDSM::params$..surv_juv_rear_prop_diversions,
- 
-    .surv_juv_rear_total_diversions = springRunDSM::params$.surv_juv_rear_total_diversions,
- 
-    ..surv_juv_rear_total_diversions = springRunDSM::params$..surv_juv_rear_total_diversions,
+  ..surv_juv_rear_prop_diversions = springRunDSM::params$..surv_juv_rear_prop_diversions,
+  .surv_juv_rear_total_diversions = springRunDSM::params$.surv_juv_rear_total_diversions,
+  ..surv_juv_rear_total_diversions =
+    springRunDSM::params$..surv_juv_rear_total_diversions,
   .stranded = springRunDSM::params$.surv_juv_rear_stranded,
   .medium = springRunDSM::params$.surv_juv_rear_medium,
   .large = springRunDSM::params$.surv_juv_rear_large,

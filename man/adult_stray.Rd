@@ -17,8 +17,8 @@ adult_stray(
   .intercept = springRunDSM::params$.adult_stray_intercept,
   .wild = springRunDSM::params$.adult_stray_wild,
   .natal_flow = springRunDSM::params$.adult_stray_natal_flow,
- 
-    .cross_channel_gates_closed = springRunDSM::params$.adult_stray_cross_channel_gates_closed,
+  .cross_channel_gates_closed =
+    springRunDSM::params$.adult_stray_cross_channel_gates_closed,
   .prop_bay_trans = springRunDSM::params$.adult_stray_prop_bay_trans,
   .prop_delta_trans = springRunDSM::params$.adult_stray_prop_delta_trans
 )

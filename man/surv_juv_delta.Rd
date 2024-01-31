@@ -19,12 +19,10 @@ surv_juv_delta(
   .avg_temp_thresh = springRunDSM::params$.surv_juv_delta_avg_temp_thresh,
   .high_predation = springRunDSM::params$.surv_juv_delta_high_predation,
   .surv_juv_delta_contact_points = springRunDSM::params$.surv_juv_delta_contact_points,
- 
-    ..surv_juv_delta_contact_points = springRunDSM::params$..surv_juv_delta_contact_points,
+  ..surv_juv_delta_contact_points = springRunDSM::params$..surv_juv_delta_contact_points,
   .prop_diverted = springRunDSM::params$.surv_juv_delta_prop_diverted,
   .surv_juv_delta_total_diverted = springRunDSM::params$.surv_juv_delta_total_diverted,
- 
-    ..surv_juv_delta_total_diverted = springRunDSM::params$..surv_juv_delta_total_diverted,
+  ..surv_juv_delta_total_diverted = springRunDSM::params$..surv_juv_delta_total_diverted,
   .medium = springRunDSM::params$.surv_juv_delta_medium,
   .large = springRunDSM::params$.surv_juv_delta_large,
   min_survival_rate = springRunDSM::params$min_survival_rate,

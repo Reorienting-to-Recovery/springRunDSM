@@ -240,9 +240,26 @@ r_to_r_baseline_params <- list(
     `San Joaquin River` = x[21]),
   
   # R2R specific metrics
-  hatchery_release = springRunDSM::spring_hatchery_release, #TODO update with renes hatchery numbers and document
-  hatchery_releases_at_chipps = matrix(0, nrow = 31, ncol = 4, dimnames = list(fallRunDSM::watershed_labels, fallRunDSM::size_class_labels)),
-  fecundity_lookup = springRunDSM::fecundity_by_age
+  hatchery_release = springRunDSM::spring_hatchery_release,
+  hatchery_release_proportion_bay = springRunDSM::hatchery_release_proportion_bay,
+  fecundity_lookup = springRunDSM::fecundity_by_age,
+  # adult_harvest_rate = springRunDSM::r2r_adult_harvest_rate,
+  # restrict_harvest_to_hatchery = FALSE,
+  # ocean_harvest_percentage = .5,
+  # tributary_harvest_percentage = harvest_percentage,
+  # no_cohort_harvest_years = c(),
+  # intelligent_crr_harvest = FALSE,
+  # intelligent_habitat_harvest = FALSE,
+  # terminal_hatchery_logic = FALSE,
+  
+  # stray model
+  flows_oct_nov = DSMflow::hatchery_oct_nov_flows$biop_itp_2018_2019,
+  flows_apr_may = DSMflow::hatchery_apr_may_flows$biop_itp_2018_2019,
+  
+  # multi route
+  movement_hypo_weights = rep(1/8, 8),
+  ..habitat_capacity = 5,
+  ..floodplain_capacity = 5
 )
 
 usethis::use_data(r_to_r_baseline_params, overwrite = TRUE)

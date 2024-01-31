@@ -5,6 +5,7 @@ r2r_seeds <- springRunDSM::spring_run_model(scenario = NULL, mode = "seed",
 
 r2r_model_results <- springRunDSM::spring_run_model(mode = "simulate", ..params = springRunDSM::r_to_r_baseline_params,
                                                 seeds = r2r_seeds)
+
 r2r_model_results$spawners
 r2r_model_results$phos
 
@@ -13,7 +14,7 @@ spawn <- dplyr::as_tibble(r2r_model_results$spawners) |>
   pivot_longer(cols = c(`1`:`20`), values_to = 'spawners', names_to = "year") %>%
   group_by(year, location) |>
   summarize(total_spawners = sum(spawners)) |>
-  filter(location != "Feather River") |>
+  # filter(location != "Feather River") |>
   mutate(year = as.numeric(year)) %>%
   ggplot(aes(year, total_spawners, color = location)) +
   geom_line() +
@@ -24,7 +25,7 @@ spawn <- dplyr::as_tibble(r2r_model_results$spawners) |>
   scale_x_continuous(breaks = 1:20) +
   theme(text = element_text(size = 20))
 
-spawn
+plotly::ggplotly(spawn)
 
 
 plot_total_spawners <- function(model_results,
