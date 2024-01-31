@@ -1,7 +1,7 @@
 library(tidyverse)
-remotes::install_github("Reorienting-to-Recovery/DSMhabitat@add-san-joaquin", force = TRUE)
+remotes::install_github("Reorienting-to-Recovery/DSMhabitat@r2r-main", force = TRUE)
 library(DSMhabitat)
-remotes::install_github("Reorienting-to-Recovery/DSMtemperature", force = TRUE)
+remotes::install_github("Reorienting-to-Recovery/DSMtemperature@update_for_above_dam", force = TRUE)
 library(DSMtemperature)
 
 
@@ -45,6 +45,7 @@ r_to_r_baseline_params <- list(
   vernalis_temps = DSMtemperature::vernalis_temperature,
   prisoners_point_temps = DSMtemperature::prisoners_point_temperature,
   degree_days = DSMtemperature::degree_days_sr$biop_itp_2018_2019,
+  degree_days_abv_dam =  DSMtemperature::degree_days_sr_abv_dam$biop_itp_2018_2019, # R2R: updated degree days for above dam to 13C threshold above dam
   mean_egg_temp_effect = DSMtemperature::egg_temperature_effect$spring_run,
   avg_temp = DSMtemperature::stream_temperature$biop_itp_2018_2019,
   avg_temp_delta = DSMtemperature::delta_temperature,
@@ -70,6 +71,9 @@ r_to_r_baseline_params <- list(
   prob_strand_late = DSMhabitat::prob_strand_late,
   prob_nest_scoured = DSMhabitat::prob_nest_scoured,
   spring_run_pools = ifelse(is.na(DSMhabitat::pools$SR_pools_sq_meters), 0, DSMhabitat::pools$SR_pools_sq_meters),
+  above_dam_spawn_proportion = DSMhabitat::above_dam_spawn_proportion$sr, # R2R - above dam proportion 
+  above_dam_rearing_proportion = DSMhabitat::above_dam_rearing_proportion$sr, # R2R - above dam proportion
+  
   
   # Data from springRunDSM cache-data (values vary by run)
   hatchery_allocation = springRunDSM::hatchery_allocation,
