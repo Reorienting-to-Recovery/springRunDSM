@@ -8,7 +8,7 @@ library(readr)
 source("calibration/fitness.R")
 source("calibration/update-params.R")
 
-params <- DSMCalibrationData::set_synth_years(springRunDSM::params)
+params <- DSMCalibrationData::set_synth_years(springRunDSM::r_to_r_baseline_params)
 
 best_previous_solution <- readr::read_rds("calibration/calibration-results-2023.rds")@solution
 
@@ -23,26 +23,25 @@ res <- ga(type = "real-valued",
               x[11], x[12], x[13], x[14], x[15], x[16], x[17], x[18], x[19],
               x[20], x[21], x[22], x[23], x[24], x[25], x[26], x[27]
             ),
-          lower = c(2.5, rep(-3.5, 26)),
-          upper = rep(3.5, 27),
+          lower = rep(-10, 27),
+          upper = rep(10, 27),
           popSize = 150,
           maxiter = 10000,
           run = 50,
           parallel = TRUE,
-          pmutation = .3, 
-          suggestions = best_previous_solution) # <- remove this argument if wanting to start from zero
+          pmutation = .5) # <- remove this argument if wanting to start from zero
                                                 # its a good idea to start from scractch when doing "annual" calibrations
 
-readr::write_rds(res, paste0("calibration/res-", Sys.time(), ".rds"))
+readr::write_rds(res, paste0("calibration/res-", Sys.Date(), ".rds"))
 
-res <- readr::read_rds("calibration/res-2023-06-09.rds")
+res <- readr::read_rds(paste0("calibration/res-", Sys.Date(), ".rds"))
 
 # Evaluate Results ------------------------------------
 
 keep <- c(2, 3, 6, 7, 10, 12, 19, 20)
 r1_solution <- res@solution[1, ]
 
-r1_params <- update_params(x = r1_solution, springRunDSM::params)
+r1_params <- update_params(x = r1_solution, springRunDSM::r_to_r_baseline_params)
 r1_params <- DSMCalibrationData::set_synth_years(r1_params)
 r1_sim <- spring_run_model(seeds = DSMCalibrationData::grandtab_imputed$spring, mode = "calibrate",
                            ..params = r1_params,

@@ -125,15 +125,15 @@ spring_run_fitness <- function(
                               stochastic = FALSE,
                               ..params = params_init)
     
-    known_nats <- known_adults[keep, 6:19] * (1 - params_init$proportion_hatchery[keep])
+    known_nats <- known_adults[keep, 6:19] 
     mean_escapent <-rowMeans(known_nats, na.rm = TRUE)
     
     sse <- sum(((preds[keep,] - known_nats)^2 * weights)/mean_escapent, na.rm = TRUE)
     
     return(sse)
   },
-  error = function(e) return(1e12),
-  warning = function(w) return(1e12)
+  error = function(e) return(1e12)
+  # warning = function(w) return(1e12)
   )
 }
 
