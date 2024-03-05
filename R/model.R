@@ -275,7 +275,7 @@ spring_run_model <- function(scenario = NULL,
     
     min_spawn_habitat <- apply(..params$spawning_habitat[ , 3:6, year], 1, min)
     
-    #TODO double check this calculation compared to theirs
+    # Migatory accumulated degree days and associated prespawn survival 
     accumulated_degree_days <- cbind(march = rowSums(..params$degree_days[ , 3:6, year]),
                                      april = rowSums(..params$degree_days[ , 4:6, year]),
                                      may = rowSums(..params$degree_days[ , 5:6, year]),
@@ -289,14 +289,14 @@ spring_run_model <- function(scenario = NULL,
                                                may = rowSums(..params$degree_days_abv_dam[ , 5:6, year]),
                                                june = ..params$degree_days_abv_dam[ , 6, year]), 1, weighted.mean, ..params$month_return_proportions)
     
-    
     prespawn_survival <- surv_adult_prespawn(average_degree_days,
                                              ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
                                              .deg_day = ..params$.adult_prespawn_deg_day)
     # R2R: above and below prespawn
     prespawn_survival_abv_dam <- .95 #TODO confirm with tech team, use max fall run surv
     
-    # Apply SR pools logic
+    
+    # Apply SR pools logic, this reflects prespawn survival during holding period 
     # R2R: init adults split into above and below dam and apply prespawn separately and 
     # then add them back together 
     init_adults <- if (stochastic) {
@@ -332,11 +332,9 @@ spring_run_model <- function(scenario = NULL,
     prespawn_survival <- surv_adult_prespawn(average_degree_days,
                                              ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
                                              .deg_day = ..params$.adult_prespawn_deg_day)
+    # R2R: above and below prespawn
+    prespawn_survival_abv_dam <- .95 #TODO confirm with tech team, use max fall run surv
     
-    # R2R: abv dam prespawn survival
-    prespawn_survival_abv_dam <- surv_adult_prespawn(average_degree_days_abv_dam,
-                                             ..surv_adult_prespawn_int = ..params$..surv_adult_prespawn_int,
-                                             .deg_day = ..params$.adult_prespawn_deg_day)
     # calculate juveniles 
     juveniles <- spawn_success(escapement = init_adults,
                                proportion_natural = natural_proportion_with_renat, # R2R ADDS NEW PARAM

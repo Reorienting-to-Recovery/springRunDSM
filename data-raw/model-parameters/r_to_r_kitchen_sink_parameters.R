@@ -5,13 +5,22 @@ library(DSMhabitat)
 library(DSMtemperature)
 library(DSMflow)
 
-# NOT 08 
+# NOT 08, could still use improvement 
 calibration_solution <- read_rds("calibration/res-2024-02-07.rds")
 
 x <- calibration_solution@solution[1,]
 names(x) <- NULL
 
-r_to_r_baseline_params <- list(
+# What did I change from baseline
+# Use max hab eff
+# Use eff flows for sac
+# reducing contact points to .3 of total (down to 1/3)
+# reducing high pred to .3 of total (down to 1/3)
+# release 0 hatch fish in river
+# Use Intelligent harvest regieme
+# Restrict harvest to hatchery ? may need to remove this
+
+r_to_r_kitchen_sink_params <- list(
   #TODO add updated spawn decay multiplier for 2019 biop
   spawn_decay_multiplier = DSMhabitat::spawning_decay_multiplier,
   
@@ -35,7 +44,7 @@ r_to_r_baseline_params <- list(
   delta_total_diverted = DSMflow::delta_total_diverted$biop_itp_2018_2019,
   prop_pulse_flows = DSMflow::proportion_pulse_flows$biop_itp_2018_2019,
   prop_flow_natal = DSMflow::proportion_flow_natal$biop_itp_2018_2019,
-  upper_sacramento_flows = DSMflow::upper_sacramento_flows$biop_itp_2018_2019,
+  upper_sacramento_flows = DSMflow::upper_sacramento_flows$eff_sac,
   delta_inflow = DSMflow::delta_inflow$biop_itp_2018_2019,
   cc_gates_days_closed = DSMflow::delta_cross_channel_closed$biop_itp_2018_2019["count", ],
   cc_gates_prop_days_closed = DSMflow::delta_cross_channel_closed$biop_itp_2018_2019["proportion", ],
@@ -53,19 +62,19 @@ r_to_r_baseline_params <- list(
   migratory_temperature_proportion_over_20 = DSMtemperature::migratory_temperature_proportion_over_20_sr,
   
   # DSMhabitat variables -----
-  spawning_habitat = DSMhabitat::sr_spawn$r_to_r_baseline,
-  inchannel_habitat_fry = DSMhabitat::sr_fry$r_to_r_baseline, # vary by run
-  inchannel_habitat_juvenile = DSMhabitat::sr_juv$r_to_r_baseline, # vary by run
-  floodplain_habitat = DSMhabitat::sr_fp$r_to_r_baseline, # vary by run
+  spawning_habitat = DSMhabitat::sr_spawn$r_to_r_tmh_eff,
+  inchannel_habitat_fry = DSMhabitat::sr_fry$r_to_r_tmh_eff, # vary by run
+  inchannel_habitat_juvenile = DSMhabitat::sr_juv$r_to_r_tmh_eff, # vary by run
+  floodplain_habitat = DSMhabitat::sr_fp$r_to_r_tmh_eff, # vary by run
   weeks_flooded = DSMhabitat::weeks_flooded$biop_itp_2018_2019,
-  delta_habitat = DSMhabitat::delta_habitat$r_to_r_baseline,
+  delta_habitat = DSMhabitat::delta_habitat$r_to_r_tmh_eff,
   sutter_habitat = DSMhabitat::sutter_habitat$biop_itp_2018_2019,
   yolo_habitat = DSMhabitat::yolo_habitat$biop_itp_2018_2019,
   tisdale_bypass_watershed = DSMhabitat::tisdale_bypass_watershed,
   yolo_bypass_watershed = DSMhabitat::yolo_bypass_watershed,
   south_delta_routed_watersheds = DSMhabitat::spring_south_delta_routed_watersheds,
-  prop_high_predation = DSMhabitat::prop_high_predation,
-  contact_points = DSMhabitat::contact_points,
+  prop_high_predation = DSMhabitat::prop_high_predation * .3,
+  contact_points = DSMhabitat::contact_points * .3,
   delta_contact_points = DSMhabitat::delta_contact_points,
   delta_prop_high_predation = DSMhabitat::delta_prop_high_predation,
   prob_strand_early = DSMhabitat::prob_strand_early,
@@ -160,12 +169,12 @@ r_to_r_baseline_params <- list(
   .ocean_entry_success_length = c(-0.0897309864, -0.0709704348, -0.0208590732, 0.0732620916),
   .ocean_entry_success_months = 0.35,
   
-  prey_density = springRunDSM::prey_density,
-  prey_density_delta = springRunDSM::prey_density_delta,
+  prey_density = rep("max", 31),
+  prey_density_delta = rep("max", 2),
   
   # Calibrated values
   ..surv_adult_enroute_int = x[1],
-  ..surv_adult_prespawn_int = x[2], # TODO check this value 
+  ..surv_adult_prespawn_int = x[2], # TODO confirm 
   ..surv_egg_to_fry_int = x[3],
   ..surv_juv_rear_int = c(`Upper Sacramento River` = x[4], 
                           `Antelope Creek` = x[4], 
@@ -173,7 +182,7 @@ r_to_r_baseline_params <- list(
                           `Bear Creek` = x[4], 
                           `Big Chico Creek` = x[4], 
                           `Butte Creek` = x[6],
-                          `Clear Creek` = 	x[5], # x[5] is low, could be contributing to low survival
+                          `Clear Creek` = 	x[5], 
                           `Cottonwood Creek` = x[4], 
                           `Cow Creek` = x[4],
                           `Deer Creek` = x[7], 
@@ -185,8 +194,8 @@ r_to_r_baseline_params <- list(
                           `Upper-mid Sacramento River` = x[9], 
                           `Sutter Bypass` = x[4],
                           `Bear River` = x[4], 
-                          `Feather River` = x[10], # x[5] is low, could be contributing to low survival
-                          `Yuba River` = x[11], # x[5] is low, could be contributing to low survival
+                          `Feather River` = x[10], 
+                          `Yuba River` = x[11],
                           `Lower-mid Sacramento River` = 	x[9], 
                           `Yolo Bypass` = x[4], 
                           `American River` = x[4],
@@ -241,7 +250,7 @@ r_to_r_baseline_params <- list(
     `San Joaquin River` = x[21]),
   
   # R2R specific metrics
-  hatchery_release = springRunDSM::spring_hatchery_release,
+  hatchery_release = matrix(0, nrow = 31, ncol = 4, dimnames = list(fallRunDSM::watershed_labels, fallRunDSM::size_class_labels)),
   hatchery_release_proportion_bay = springRunDSM::hatchery_release_proportion_bay,
   fecundity_lookup = springRunDSM::fecundity_by_age,
   # adult_harvest_rate = springRunDSM::r2r_adult_harvest_rate,
@@ -263,5 +272,5 @@ r_to_r_baseline_params <- list(
   ..floodplain_capacity = 5
 )
 
-usethis::use_data(r_to_r_baseline_params, overwrite = TRUE)
+usethis::use_data(r_to_r_kitchen_sink_params, overwrite = TRUE)
 
