@@ -1,19 +1,19 @@
 title: springRunDSM
-url: https://CVPIA-OSC.github.io/springRunDSM/
+url: https://reorienting-to-recovery.github.io/springRunDSM/
 template:
   params:
-    bootswatch: yeti
+    bootswatch: flatly
 
 home:
   links:
-  - text: Fish and Wildlife Service's CVPIA website
-    href: https://www.fws.gov/lodi/anadromous_fish_restoration/afrp_index.htm
-  - text: Bureau of Reclamation's CVPIA website
-    href: https://www.usbr.gov/mp/cvpia/
+  - text: Reorienting to Recovery Project Website
+    href: https://csamp.baydeltalive.com/recovery/reorienting-to-recovery
+  - text: Reorienting to Recovery Modeling Overview Website
+    href: https://reorienting-to-recovery.gitbook.io/documentation-site/zCZ2Z2yqFYMUQrtZdTlg/
 
 reference:
 - title: Life Cycle Model and Model Parameters
-  desc: The spring run life cycle model and it's parameters
+  desc: The spring run life cycle model and its parameters
   contents:
   - spring_run_model
   - params
@@ -22,6 +22,7 @@ reference:
   desc: Functions that calculate survival
   contents:
   - surv_adult_enroute
+  - apply_enroute_survival
   - surv_adult_prespawn
   - surv_egg_to_fry
   - surv_juv_bypass
@@ -37,8 +38,17 @@ reference:
   desc: Functions that calculate growth and movement
   contents:
   - adult_stray
+  - apply_straying
+  - compute_adult_stray_rates
+  - stray_returning_adults
+  - harvest_adults
+  - juvenile_month_dynamic
   - pulse_movement
+  - snow_globe_movement
+  - temperature_movement
+  - time_movement
   - fill
+  - fill_regional_dens_depend
   - route
   - route_and_rear_deltas
   - route_bypass
@@ -49,7 +59,8 @@ reference:
   - rear
   - migrate
   - ocean_transition_month
-  - yearling_growth
+  - bioenergetics_transitions
+  - get_growth_rates
 
 - title: Datasets
   desc: Data used by the lifecycle model
@@ -65,6 +76,16 @@ reference:
   - natural_adult_removal_rate
   - proportion_hatchery
   - stray_rate
+  - hatchery_release_proportion_bay
+  - hatchery_stray_betareg
+  - hatchery_to_bay_distance
+  - prey_density
+  - prey_density_delta
+  - straying_destinations
+  - fall_hatchery_release
+  - hatchery_releases_at_chipps
+  - fecundity_by_age
+  - r2r_adult_harvest_rate
 
 - title: Wrapper and Helper Functions
   desc: Convenience functions that call multiple sub-models or are used within submodels.
@@ -72,10 +93,10 @@ reference:
   - get_habitat
   - get_rearing_survival
   - get_migratory_survival
-  - get_spawning_adults
   - territory_by_size
   - gamma_MOM
   - days_in_month
+  - pretty_num
   
 - title: Utility Functions 
   desc: functions used for formatting and other uility purposes.
@@ -93,19 +114,17 @@ navbar:
   - text: 'Articles'
     menu:
       - text: 'Calibration'
-        href: 'articles/calibration.html'
+        href: 'articles/calibration-2021.html'
       - text: 'Sensitivity Analysis'
         href: 'articles/sensitivity-analysis.html'
       - text: 'Hatchery Analysis'
         href: 'articles/hatchery-analysis.html'
       - text: 'Temperature Modeling'
         href: 'articles/temperature-model.html'
-      - text: 'Model FAQs'
-        href: 'articles/model-faq.html'
-  - text: 'News'
-    href: news/index.html
+      - text: 'Model FAQ'
+        href: 'articles/model_faq.html'
 
 repo:
  url:
-  home: https://github.com/CVPIA-OSC/springRunDSM
-  issue: https://github.com/CVPIA-OSC/springRunDSM/issues/
+  home: https://github.com/reorienting-to-recovery/springRunDSM
+  issue: https://github.com/reorienting-to-recovery/springRunDSM/issues/
