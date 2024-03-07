@@ -6,7 +6,7 @@ library(DSMtemperature)
 library(DSMflow)
 
 # NOT 08, could still use improvement 
-calibration_solution <- read_rds("calibration/res-2024-02-07.rds")
+calibration_solution <- read_rds("calibration/res-2024-03-06.rds")
 
 x <- calibration_solution@solution[1,]
 names(x) <- NULL
