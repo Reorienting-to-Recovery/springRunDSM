@@ -40,15 +40,9 @@ reference:
   - adult_stray
   - apply_straying
   - compute_adult_stray_rates
-  - stray_returning_adults
-  - harvest_adults
-  - juvenile_month_dynamic
   - pulse_movement
-  - snow_globe_movement
-  - temperature_movement
-  - time_movement
-  - fill
-  - fill_regional_dens_depend
+  - fill_natal
+  - fill_regional
   - route
   - route_and_rear_deltas
   - route_bypass
@@ -58,7 +52,6 @@ reference:
   - growth_floodplain
   - rear
   - migrate
-  - ocean_transition_month
   - bioenergetics_transitions
   - get_growth_rates
 
@@ -68,7 +61,8 @@ reference:
   - adult_seeds
   - adult_harvest_rate
   - cross_channel_stray_rate
-  - growth_rates
+  - growth_rates_floodplain
+  - growth_rates_inchannel
   - hatchery_allocation
   - diversity_group
   - mass_by_size_class
@@ -82,10 +76,8 @@ reference:
   - prey_density
   - prey_density_delta
   - straying_destinations
-  - fall_hatchery_release
   - hatchery_releases_at_chipps
   - fecundity_by_age
-  - r2r_adult_harvest_rate
 
 - title: Wrapper and Helper Functions
   desc: Convenience functions that call multiple sub-models or are used within submodels.
@@ -94,13 +86,6 @@ reference:
   - get_rearing_survival
   - get_migratory_survival
   - territory_by_size
-  - gamma_MOM
-  - days_in_month
-  - pretty_num
-  
-- title: Utility Functions 
-  desc: functions used for formatting and other uility purposes.
-  contents:
   - pretty_num
 
 navbar:

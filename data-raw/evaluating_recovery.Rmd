@@ -34,9 +34,11 @@ colors_full <-  c("#9A8822", "#F5CDB4", "#F8AFA8", "#FDDDA0", "#74A089", #Royal 
                           )
 scenario_six_colors <- c("#02401B", "#9A8822", "#798E87", "#5B1A18","#972D15", "#DC863B", "#AA9486")
 
+# TODO to reflect spring run populations, check against table in google doc
 non_spawn_regions <- c("Upper-mid Sacramento River", "Sutter Bypass",
                        "Lower-mid Sacramento River", "Yolo Bypass",
-                       "Lower Sacramento River", "San Joaquin River") 
+                       "Lower Sacramento River", "San Joaquin River",
+                       "Bear Creek") 
 ```
 
 This document walks through the Reorienting to Recovery's Recovery Definition and evaluates how the Kitchen Sink Blended Scenario Performs. It provides summary statistics and visualizations to evaluate recovery according to defined thresholds recovery metrics (Threshold Recovery Metrics table below) and to explore results associated with non thereshold biological metrics (Additional Biological Metrics table below).
@@ -115,11 +117,9 @@ The following code block runs the kitchen sink scenario.
 ```{r, echo = TRUE}
 # Kitchen Sink --
 new_params_ks <- springRunDSM::r_to_r_kitchen_sink_params
-new_params_ks$movement_hypo_weights <- c(1, rep(0, 7))
 
 # BASELINE --
 new_params <- springRunDSM::r_to_r_baseline_params
-new_params$movement_hypo_weights <- c(1, rep(0, 7))
 
 # seed
 r2r_seeds_ks <- springRunDSM::spring_run_model(mode = "seed",
@@ -178,7 +178,16 @@ spawn_baseline <- suppressMessages(dplyr::as_tibble(r2r_model_results$spawners) 
 
 # create percent diff formula 
 percent_diff <- function(old_value, new_value) {
-  ((new_value - old_value) / old_value) * 100
+  if(old_value == 0) {
+    old_value <- 0.01
+  }
+  if(new_value == 0) {
+    if(old_value == 0) {
+      return(0)
+    }
+    new_value <- 0.01
+  }
+  return(((new_value - old_value) / old_value) * 100)
 }
 
 # create spawner
@@ -187,6 +196,8 @@ spawners <- bind_rows(spawn_baseline, spawn_totals_kitchen_sink) |>
   group_by(year) |> 
   summarize(`Baseline` = sum(`Baseline`, na.rm = TRUE),
             `Kitchen Sink` = sum(`Kitchen Sink`, na.rm = TRUE)) |> 
+  ungroup() |>
+  rowwise() |>
   mutate(percent_difference = percent_diff(`Baseline`, `Kitchen Sink`))
 
 # View(spawners)
@@ -214,6 +225,7 @@ ggplotly(percent_diff_plot)
 ```{r}
 spawners <- bind_rows(spawn_baseline, spawn_totals_kitchen_sink) |> 
   pivot_wider(names_from = scenario, values_from = total_spawners) |>
+  rowwise() |> 
   mutate(percent_difference = percent_diff(`Baseline`, `Kitchen Sink`))
 
 # make percent diff plot all tribs 
@@ -244,7 +256,8 @@ results_df_baseline <- create_model_results_dataframe(r2r_model_results,
                                              scenario = "Baseline",
                                              model_parameters = springRunDSM::r_to_r_baseline_params, selected_run = "spring")
 
-potential_dependent_pops <- c("Bear River", "Big Chico Creek", "Elder Creek", "Paynes Creek",  "Stoney Creek", "Thomes Creek")
+# TODO update these for spring run, check against table in google doc
+potential_dependent_pops <- c("Bear River", "Big Chico Creek", "Elder Creek", "Paynes Creek",  "Stoney Creek", "Thomes Creek", "Antelope Creek")
 
 ind_pop_baseline <- results_df_baseline |>
   select(-size_or_age, -origin, -month, -run) |>

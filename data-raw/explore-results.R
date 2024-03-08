@@ -7,19 +7,19 @@ r2r_seeds <- springRunDSM::spring_run_model(scenario = NULL, mode = "seed",
 
 r2r_model_results <- springRunDSM::spring_run_model(mode = "simulate", 
                                                     ..params = springRunDSM::r_to_r_kitchen_sink_params,
-                                                seeds = r2r_seeds,
-                                                delta_surv_inflation = TRUE)
+                                                    seeds = r2r_seeds,
+                                                    delta_surv_inflation = TRUE)
 
 r2r_model_results$spawners
 r2r_model_results$phos
 
 spawn <- dplyr::as_tibble(r2r_model_results$spawners) |>
   dplyr::mutate(location = fallRunDSM::watershed_labels) |>
-  pivot_longer(cols = c(`1`:`20`), values_to = 'spawners', names_to = "year") %>%
+  pivot_longer(cols = c(`1`:`20`), values_to = 'spawners', names_to = "year") |>
   group_by(year, location) |>
   summarize(total_spawners = sum(spawners)) |>
-  # filter(location != "Feather River") |>
-  mutate(year = as.numeric(year)) %>%
+  # filter(!location %in% c("Feather River", "Butte Creek")) |>
+  mutate(year = as.numeric(year)) |>
   ggplot(aes(year, total_spawners, color = location)) +
   geom_line() +
   theme_minimal() +
@@ -35,13 +35,13 @@ plotly::ggplotly(spawn)
 # CHECK against grandtab
 grandtab_totals <- dplyr::as_tibble(DSMCalibrationData::grandtab_observed$spring)|> #change which results to look at diff plots
   dplyr::mutate(location = fallRunDSM::watershed_labels) |>
-  pivot_longer(cols = c(`1998`:`2017`), values_to = 'spawners', names_to = "year") %>%
+  pivot_longer(cols = c(`1998`:`2017`), values_to = 'spawners', names_to = "year") |>
   # filter(!location %in% non_spawn_regions) |>
   group_by(year,
            location
   ) |>
   summarize(total_spawners = sum(spawners, na.rm = TRUE)) |>
-  mutate(year = as.numeric(year)) %>%
+  mutate(year = as.numeric(year)) |>
   ggplot(aes(year, total_spawners,
              color = location
   )) +
@@ -67,7 +67,7 @@ plot_total_spawners <- function(model_results,
       dplyr::mutate(location = fallRunDSM::watershed_labels)
   }
   
-  spawn %>%
+  spawn |>
     pivot_longer(cols = c(`1`:`20`), values_to = 'spawners', names_to = "year") |>
     group_by(year) |>
     summarize(total_spawners = sum(spawners)) |>
