@@ -12,104 +12,76 @@ home:
     href: https://reorienting-to-recovery.gitbook.io/documentation-site/zCZ2Z2yqFYMUQrtZdTlg/
 
 reference:
-- title: Life Cycle Model and Model Parameters
-  desc: The spring run life cycle model and its parameters
-  contents:
-  - spring_run_model
-  - params
+  - title: Life Cycle Model and Model Parameters
+    desc: The spring run life cycle model and its parameters
+    contents:
+    - spring_run_model
+    - params
+    
+  - title: Survival Sub-models
+    desc: Functions that calculate survival
+    contents:
+    - surv_adult_enroute
+    - apply_enroute_survival
+    - surv_adult_prespawn
+    - surv_egg_to_fry
+    - surv_juv_bypass
+    - surv_juv_delta
+    - surv_juv_outmigration_delta
+    - surv_juv_outmigration_sac
+    - surv_juv_outmigration_san_joaquin
+    - surv_juv_rear
+    - spawn_success
+    - ocean_entry_success
 
-- title: Survival Sub-models
-  desc: Functions that calculate survival
-  contents:
-  - surv_adult_enroute
-  - apply_enroute_survival
-  - surv_adult_prespawn
-  - surv_egg_to_fry
-  - surv_juv_bypass
-  - surv_juv_delta
-  - surv_juv_outmigration_delta
-  - surv_juv_outmigration_sac
-  - surv_juv_outmigration_san_joaquin
-  - surv_juv_rear
-  - spawn_success
-  - ocean_entry_success
+  - title: Growth and Movement Sub-models
+    desc: Functions that calculate growth and movement
+    contents:
+    - adult_stray
+    - apply_straying
+    - compute_adult_stray_rates
+    - pulse_movement
+    - fill
+    - fill_natal
+    - fill_regional
+    - route
+    - route_and_rear_deltas
+    - route_bypass
+    - route_regional
+    - route_to_south_delta
+    - growth
+    - growth_floodplain
+    - rear
+    - migrate
+    - ocean_transition_month
+    - get_growth_rates
+    - yearling_growth
 
-- title: Growth and Movement Sub-models
-  desc: Functions that calculate growth and movement
-  contents:
-  - adult_stray
-  - apply_straying
-  - compute_adult_stray_rates
-  - pulse_movement
-  - fill_natal
-  - fill_regional
-  - route
-  - route_and_rear_deltas
-  - route_bypass
-  - route_regional
-  - route_to_south_delta
-  - growth
-  - growth_floodplain
-  - rear
-  - migrate
-  - bioenergetics_transitions
-  - get_growth_rates
+  - title: Datasets
+    desc: Data used by the lifecycle model
+    contents:
+    - adult_seeds
+    - adult_harvest_rate
+    - cross_channel_stray_rate
+    - growth_rates
+    - growth_rates_floodplain
+    - growth_rates_inchannel
+    - hatchery_allocation
+    - diversity_group
+    - mass_by_size_class
+    - month_return_proportions
+    - natural_adult_removal_rate
+    - proportion_hatchery
+    - stray_rate
 
-- title: Datasets
-  desc: Data used by the lifecycle model
-  contents:
-  - adult_seeds
-  - adult_harvest_rate
-  - cross_channel_stray_rate
-  - growth_rates_floodplain
-  - growth_rates_inchannel
-  - hatchery_allocation
-  - diversity_group
-  - mass_by_size_class
-  - month_return_proportions
-  - natural_adult_removal_rate
-  - proportion_hatchery
-  - stray_rate
-  - hatchery_release_proportion_bay
-  - hatchery_stray_betareg
-  - hatchery_to_bay_distance
-  - prey_density
-  - prey_density_delta
-  - straying_destinations
-  - hatchery_releases_at_chipps
-  - fecundity_by_age
-
-- title: Wrapper and Helper Functions
-  desc: Convenience functions that call multiple sub-models or are used within submodels.
-  contents:
-  - get_habitat
-  - get_rearing_survival
-  - get_migratory_survival
-  - territory_by_size
-  - pretty_num
-
-navbar:
-  structure:
-    left:  [home, reference, articles, news]
-    right: [github]
-  type: default
-  left:
-  - text: 'Reference'
-    href: reference/index.html
-  - text: 'Articles'
-    menu:
-      - text: 'Calibration'
-        href: 'articles/calibration-2021.html'
-      - text: 'Sensitivity Analysis'
-        href: 'articles/sensitivity-analysis.html'
-      - text: 'Hatchery Analysis'
-        href: 'articles/hatchery-analysis.html'
-      - text: 'Temperature Modeling'
-        href: 'articles/temperature-model.html'
-      - text: 'Model FAQ'
-        href: 'articles/model_faq.html'
-
-repo:
- url:
-  home: https://github.com/reorienting-to-recovery/springRunDSM
-  issue: https://github.com/reorienting-to-recovery/springRunDSM/issues/
+  - title: Wrapper and Helper Functions
+    desc: Convenience functions that call multiple sub-models or are used within submodels.
+    contents:
+    - days_in_month
+    - gamma_MOM
+    - get_habitat
+    - get_rearing_survival
+    - get_migratory_survival
+    - get_spawning_adults
+    - territory_by_size
+    - pretty_num

@@ -15,7 +15,7 @@ library(googleCloudStorageR)
 library(ggplot2)
 library(scales)
 library(tidyverse)
-library(fallRunDSM)
+library(springRunDSM)
 library(plotly)
 library(producePMs)
 colors_small <-  c("#9A8822", "#F5CDB4", "#F8AFA8", "#FDDDA0", "#74A089", #Royal 2
@@ -167,7 +167,7 @@ r2r_model_results <- springRunDSM::spring_run_model(mode = "simulate",
 
 # baseline spawn totals 
 spawn_baseline <- suppressMessages(dplyr::as_tibble(r2r_model_results$spawners) |> #change which results to look at diff plots
-  dplyr::mutate(location = fallRunDSM::watershed_labels) |>
+  dplyr::mutate(location = springRunDSM::watershed_labels) |>
   pivot_longer(cols = c(`1`:`20`), values_to = 'spawners', names_to = "year") %>%
   filter(!location %in% non_spawn_regions) |>
   group_by(year,
