@@ -9,7 +9,8 @@ source("calibration/fitness.R")
 source("calibration/update-params.R")
 
 params <- DSMCalibrationData::set_synth_years(springRunDSM::r_to_r_baseline_params)
-
+params$prey_density <- rep("max", 31)
+params$prey_density_delta <- rep("max", 2)
 best_previous_solution <- readr::read_rds("calibration/calibration-results-2023.rds")@solution
 
 # Perform calibration --------------------
@@ -23,8 +24,8 @@ res <- ga(type = "real-valued",
               x[11], x[12], x[13], x[14], x[15], x[16], x[17], x[18], x[19],
               x[20], x[21], x[22], x[23], x[24], x[25], x[26], x[27]
             ),
-          lower = rep(-10, 27),
-          upper = rep(10, 27),
+          lower = rep(-7, 27),
+          upper = rep(7, 27),
           popSize = 150,
           maxiter = 10000,
           run = 50,
