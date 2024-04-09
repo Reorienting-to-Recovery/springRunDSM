@@ -9,13 +9,13 @@ source("calibration/fitness.R")
 source("calibration/update-params.R")
 
 params <- DSMCalibrationData::set_synth_years(springRunDSM::r_to_r_baseline_params)
-params$prey_density <- rep("max", 31)
-params$prey_density_delta <- rep("max", 2)
+params$prey_density <- rep("hi", 31)
+params$prey_density_delta <- rep("hi", 2)
 best_previous_solution <- readr::read_rds("calibration/calibration-results-2023.rds")@solution
 
 # Perform calibration --------------------
 res <- ga(type = "real-valued",
-          fitness =
+          fitness = 
             function(x) -spring_run_fitness(
               known_adults = DSMCalibrationData::grandtab_observed$spring,
               seeds = DSMCalibrationData::grandtab_imputed$spring,
@@ -37,6 +37,35 @@ readr::write_rds(res, paste0("calibration/res-", Sys.Date(), ".rds"))
 
 res <- readr::read_rds(paste0("calibration/res-", Sys.Date(), ".rds"))
 
+
+# fix high-performing calibrated results ----------------------------------
+res <- readr::read_rds(paste0("calibration/res-2024-03-07.rds")) # Feather River has cor of 0.543
+feather_param <- unname(res@solution[1,10])
+
+res <- readr::read_rds(paste0("calibration/res-2024-02-14.rds")) # Yuba has a good pattern
+yuba_param <- unname(res@solution[1,11])
+
+res <- readr::read_rds(paste0("calibration/res-2024-02-08.rds")) # Antelope has r of 0.767, Battle OK
+antelope_param <- unname(res@solution[1,4])
+
+res <- ga(type = "real-valued",
+          fitness = 
+            function(x) -spring_run_fitness(
+              known_adults = DSMCalibrationData::grandtab_observed$spring,
+              seeds = DSMCalibrationData::grandtab_imputed$spring,
+              params = params,
+              x[1], x[2], x[3], surv_juv_rear_int_default = antelope_param, x[5], x[6], x[7], x[8], x[9], surv_juv_rear_int_feather = feather_param,
+              x[11], x[12], x[13], x[14], x[15], x[16], x[17], x[18], x[19],
+              x[20], x[21], x[22], x[23], x[24], x[25], x[26], x[27]
+            ),
+          lower = rep(-7, 27),
+          upper = rep(7, 27),
+          popSize = 100,
+          maxiter = 10000,
+          run = 50,
+          parallel = TRUE,
+          pmutation = .5)
+
 # Evaluate Results ------------------------------------
 
 keep <- c(2, 3, 6, 7, 10, 12, 19, 20)
@@ -47,8 +76,6 @@ r1_params <- DSMCalibrationData::set_synth_years(r1_params)
 r1_sim <- spring_run_model(seeds = DSMCalibrationData::grandtab_imputed$spring, mode = "calibrate",
                            ..params = r1_params,
                            stochastic = FALSE)
-
-
 r1_nat_spawners <- as_tibble(r1_sim[keep, ,drop = F]) %>%
   mutate(watershed = DSMscenario::watershed_labels[keep]) %>%
   gather(year, spawners, -watershed) %>%
