@@ -171,18 +171,27 @@ spring_run_model <- function(scenario = NULL,
       annual_adults_hatch_removed <- if (stochastic) {
         rbinom(n = 31,
                size = adults_by_month,
-               prob = 1 - natural_adult_removal_rate)
+               prob = 1 - ..params$natural_adult_removal_rate)
       } else {
-        annual_adults * (1 - natural_adult_removal_rate)
+        annual_adults * (1 - ..params$natural_adult_removal_rate)
       }
       spawners = list(init_adults = round(annual_adults_hatch_removed),
-                      proportion_natural = 1 - springRunDSM::params$proportion_hatchery)
+                      proportion_natural = 1 - ..params$proportion_hatchery)
+    }
+    if(mode == "simulate") {
+      annual_adults_hatch_removed <- if (stochastic) {
+        rbinom(n = 31,
+               size = adults_by_month,
+               prob = 1 - ..params$natural_adult_removal_rate)
+      } else {
+        adults[, year] * (1 - ..params$natural_adult_removal_rate)
+      }
     }
     
     if (mode == "simulate") {
       # HARVEST ----------------------------------------------------------------
       # Incidental harvest percentage 
-      hatch_adults <- adults[, year] * seeds$proportion_hatchery 
+      hatch_adults <- annual_adults_hatch_removed * seeds$proportion_hatchery 
       adults_after_harvest <- hatch_adults * (1 - .1) # assume 10% hooking mortality 
       hatch_after_harvest_by_age <- round(unname(adults_after_harvest) * as.matrix(default_hatch_age_dist[2:5]))
       row.names(hatch_after_harvest_by_age) = springRunDSM::watershed_labels
@@ -190,7 +199,7 @@ spring_run_model <- function(scenario = NULL,
       harvested_hatchery_adults <- hatch_adults - adults_after_harvest
     
     # Incidental harvest percentage 
-      nat_adults <- adults[, year] * (1 - seeds$proportion_hatchery)
+      nat_adults <- annual_adults_hatch_removed * (1 - seeds$proportion_hatchery)
       natural_adults_after_harvest <- nat_adults * (1 - .1) # assume 10% hooking mortality 
       natural_adults_by_age <- round(unname(natural_adults_after_harvest) * as.matrix(default_nat_age_dist[2:5]))
       harvested_natural_adults <- nat_adults - natural_adults_after_harvest

@@ -18,21 +18,6 @@ apply_enroute_survival(
   .adult_en_route_bypass_overtopped,
   stochastic
 )
-
-apply_enroute_survival(
-  year,
-  month,
-  adults,
-  month_return_proportions,
-  gates_overtopped,
-  tisdale_bypass_watershed,
-  yolo_bypass_watershed,
-  migratory_temperature_proportion_over_20,
-  ..surv_adult_enroute_int,
-  .adult_en_route_migratory_temp,
-  .adult_en_route_bypass_overtopped,
-  stochastic
-)
 }
 \arguments{
 \item{year}{The year of the simulation.}
@@ -63,11 +48,7 @@ apply_enroute_survival(
 }
 \value{
 A list containing the initial number of adults, the proportion of natural adults, and the initial number of adults by month.
-
-A list containing the initial number of adults, the proportion of natural adults, and the initial number of adults by month.
 }
 \description{
-This function calculates the survival of adult salmon during their enroute migration.
-
 This function calculates the survival of adult salmon during their enroute migration.
 }
