@@ -31,6 +31,13 @@
 #' Compiled by: James T. Peterson \email{jt.peterson@@oregonstate.edu}
 "hatchery_allocation"
 
+#' @title Spring Hatchery Release
+#' @description Hatchery release by size class and hatchery
+#' @format A list of 20 elements (representing simulation year), each containing a matrix with dimensions 31 x 4 (watershed x size class)
+#' @source Hatchery return data comes from the production targets defined in the
+#' \href{https://swfsc-publications.fisheries.noaa.gov/publications/CR/2012/2012California.pdf}{California HSRG (Page 82)}
+"spring_hatchery_release"
+
 #' Adult Seeds
 #' @title Adult Seeds
 #' @description Adult fish for the initial 5 years of the simulations.

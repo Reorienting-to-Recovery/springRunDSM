@@ -92,6 +92,7 @@ hatchery_releases <- tibble(
   Run = c("Spring"),
   `Number Released` = c(2000000) # 2 mil spring run between april and may
 )
+
 # prep for model 
 summarized_release <- hatchery_releases |>
   filter(Run == "Spring") |> 
@@ -99,9 +100,18 @@ summarized_release <- hatchery_releases |>
   right_join(watershed_attributes |> select(watershed, order)) |>
   arrange(order) |>
   mutate(release_number = ifelse(is.na(release_number), 0, release_number)) 
-spring_hatchery_release = matrix(0, nrow = 31, ncol = 4, dimnames = list(fallRunDSM::watershed_labels, c("s", "m", "l", "xl")))
+
+spring_hatchery_release = matrix(0, nrow = 31, ncol = 4, 
+                                 dimnames = list(fallRunDSM::watershed_labels,
+                                                 c("s", "m", "l", "xl")))
+
 # populate hatchery release as larger fish based on avg hatchery release data
 spring_hatchery_release[, 3] <- summarized_release$release_number
+
+# convert to list of 20 (one matrix per year) to allow hatchery releases to vary annually
+spring_hatchery_release <- rep(list(spring_hatchery_release), 20)
+names(spring_hatchery_release) <- c(1:20)
+
 usethis::use_data(spring_hatchery_release, overwrite = TRUE)
 knitr::kable(hatchery_releases)
 ```
