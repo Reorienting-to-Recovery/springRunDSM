@@ -27,6 +27,10 @@ spring_run_model <- function(scenario = NULL,
   if (mode == "simulate") {
     if (is.null(scenario)) {
       # the do nothing scenario to force habitat degradation
+      # the do nothing scenario to force habitat degradation
+      ..params$survival_adjustment <- matrix(1, nrow = 31, ncol = 21,
+                                             dimnames = list(DSMscenario::watershed_labels,
+                                                             1980:2000))
       scenario <- DSMscenario::scenarios$NO_ACTION
     }
     
@@ -61,10 +65,9 @@ spring_run_model <- function(scenario = NULL,
   }
   
   if (mode == "calibrate") {
-    scenario_data <- list(
-      survival_adjustment = matrix(1, nrow = 31, ncol = 21,
-                                   dimnames = list(DSMscenario::watershed_labels,
-                                                   1980:2000)))
+    ..params$survival_adjustment <- matrix(1, nrow = 31, ncol = 21,
+                                           dimnames = list(DSMscenario::watershed_labels,
+                                                           1980:2000))
   }
   simulation_length <- switch(mode,
                               "seed" = 6,
@@ -552,7 +555,7 @@ spring_run_model <- function(scenario = NULL,
             
             # we only care for floodplain and inchannel
             yearlings_survival_rates <- get_rearing_survival(juv_dynamics_year, summer_months,
-                                                             survival_adjustment = scenario_data$survival_adjustment,
+                                                             survival_adjustment = ..params$survival_adjustment,
                                                              mode = mode,
                                                              avg_temp = ..params$avg_temp,
                                                              avg_temp_delta = ..params$avg_temp_delta,
