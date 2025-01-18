@@ -12,7 +12,7 @@ watershed_labels <- c("Upper Sacramento River", "Antelope Creek", "Battle Creek"
                       "Cosumnes River", "Mokelumne River", "Merced River", "Stanislaus River",
                       "Tuolumne River", "San Joaquin River")
 
-usethis::use_data(watershed_labels)
+usethis::use_data(watershed_labels, overwrite = T)
 
 # Adult seeds
 adult_seeds <- matrix(0, nrow = 31, ncol = 30)
@@ -87,7 +87,7 @@ usethis::use_data(diversity_group, overwrite = TRUE)
 
 # Size class labels
 size_class_labels <- c('s', 'm', 'l', 'vl')
-usethis::use_data(size_class_labels)
+usethis::use_data(size_class_labels, overwrite = T)
 
 # calculate growth rates
 growth_rates_inchannel <- growth()
