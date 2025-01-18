@@ -8,14 +8,14 @@
 #' Compiled by: James T. Peterson \email{jt.peterson@@oregonstate.edu}
 "adult_harvest_rate"
 
-#' Spawners Removal Rate
-#' @title Spawners Removal Rate
+#' Natural Spawners Removal Rate
+#' @title Natural Spawners Removal Rate
 #' @description Spawners removed for hatcheries
 #' @format 1 dimensional array [31 watersheds]
 #' @source
 #' Various \href{https://s3-us-west-2.amazonaws.com/cvpia-reference-docs/AWP+Attachment+1.pdf}{CVPIA Science Integration Team: FY18 Decision Support Model activities and FY17 priorities Memorandum}
 #'
-#' Spawner removal rate was derived using coded wire tag analysis. Details and methodology are available \href{https://cvpia-osc.github.io/springRunDSM/articles/hatchery-analysis.html}{here}.
+#' Natural adult removal rate was derived using coded wire tag analysis. Details and methodology are available \href{https://cvpia-osc.github.io/springRunDSM/articles/hatchery-analysis.html}{here}.
 #'
 #' Compiled by: James T. Peterson \email{jt.peterson@@oregonstate.edu}
 "natural_adult_removal_rate"
@@ -33,7 +33,7 @@
 
 #' @title Spring Hatchery Release
 #' @description Hatchery release by size class and hatchery
-#' @format A list of 20 elements (representing simulation year), each containing a matrix with dimensions 31 x 4 (watershed x size class)
+#' @format A matrix with dimensions 31 x 4 x 20 (watershed x size class x simulation year)
 #' @source Hatchery return data comes from the production targets defined in the
 #' \href{https://swfsc-publications.fisheries.noaa.gov/publications/CR/2012/2012California.pdf}{California HSRG (Page 82)}
 "spring_hatchery_release"

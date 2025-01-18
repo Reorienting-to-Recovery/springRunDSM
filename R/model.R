@@ -167,7 +167,7 @@ spring_run_model <- function(scenario = NULL,
     # Do not need to apply harvest, or survival because starting with GrandTab values
     
     # the natural adult removal rate is 0 for years where we have no hatchery releases
-    years_with_no_hatchery_release <- which(rowSums(..params$hatchery_release[[year]]) == 0)
+    years_with_no_hatchery_release <- which(rowSums(..params$hatchery_release[,,year]) == 0)
     ..params$natural_adult_removal_rate[years_with_no_hatchery_release] <- 0
     
     if (mode %in% c("seed", "calibrate")) {
@@ -227,7 +227,7 @@ spring_run_model <- function(scenario = NULL,
     # STRAY --------------------------------------------------------------------
       adults_after_stray <- apply_straying(year, adults_after_harvest$natural_adults,
                                            adults_after_harvest$hatchery_adults,
-                                           total_releases = ..params$hatchery_release[[year]],
+                                           total_releases = ..params$hatchery_release[,,year],
                                            release_month = 1,
                                            flows_oct_nov = ..params$flows_oct_nov,
                                            flows_apr_may = ..params$flows_apr_may,
@@ -244,17 +244,18 @@ spring_run_model <- function(scenario = NULL,
                                          ..surv_adult_enroute_int = ..params$..surv_adult_enroute_int,
                                          .adult_en_route_migratory_temp = ..params$.adult_en_route_migratory_temp,
                                          .adult_en_route_bypass_overtopped = ..params$.adult_en_route_bypass_overtopped,
+                                         hatchery_release = ..params$hatchery_release[,,year],
                                          stochastic = stochastic)
     }
     
-    init_adults <- spawners$init_adults
+    init_adults <- round(spawners$init_adults)
     
     output$spawners[ , year] <- init_adults
     # # For use in the r2r metrics ---------------------------------------------
     # TODO fix handling for PHOS on non spawn and 0 fish watersheds
     phos <- ifelse(is.na(1 - spawners$proportion_natural), 0, 1 - spawners$proportion_natural)
     # if hatchery releases from last five years are 0, all renatured
-    if (mode == "simulate" & year > 5 & (sum(unlist(..params$hatchery_release[year - 5:year]))) == 0) {
+    if (mode == "simulate" & year > 5 & (sum(..params$hatchery_release[ , , abs((year-5)):year])) == 0) {
       natural_proportion_with_renat <- rep(1, 31)
       names(natural_proportion_with_renat) <- fallRunDSM::watershed_labels
     } else if (year > 3){
@@ -373,7 +374,7 @@ spring_run_model <- function(scenario = NULL,
     natural_juveniles <- total_juves_pre_hatchery  * natural_proportion_with_renat
     total_juves_pre_hatchery <- rowSums(juveniles)
     # TODO add ability to vary release per year
-    juveniles <- juveniles + ..params$hatchery_release[[year]]
+    juveniles <- juveniles + sweep(..params$hatchery_release[,,year], MARGIN=2, (1 - ..params$hatchery_release_proportion_bay), "*")
     
     # Create new prop natural including hatch releases that we can use to apply to adult returns
     proportion_natural_juves_in_tribs <- natural_juveniles / rowSums(juveniles)
@@ -401,14 +402,14 @@ spring_run_model <- function(scenario = NULL,
       if (month %in% 1:5) juv_dynamics_year <- year + 1 else juv_dynamics_year <- year
       
       growth_rates_ic <- get_growth_rates(growth_temps[,month, juv_dynamics_year],
-                                          prey_density = ..params$prey_density)
+                                          prey_density = ..params$prey_density[, year])
       
       growth_rates_fp <- get_growth_rates(growth_temps[,month, juv_dynamics_year],
-                                          prey_density = ..params$prey_density,
+                                          prey_density = ..params$prey_density[, year],
                                           floodplain = TRUE)
       
       growth_rates_delta <- get_growth_rates(..params$avg_temp_delta[month, juv_dynamics_year,],
-                                             prey_density = ..params$prey_density_delta)
+                                             prey_density = ..params$prey_density_delta[, year])
       
       habitat <- get_habitat(juv_dynamics_year, month,
                              inchannel_habitat_fry = ..params$inchannel_habitat_fry,
@@ -419,7 +420,7 @@ spring_run_model <- function(scenario = NULL,
                              delta_habitat = ..params$delta_habitat)
       
       rearing_survival <- get_rearing_survival(juv_dynamics_year, month,
-                                               survival_adjustment = scenario_data$survival_adjustment,
+                                               survival_adjustment = ..params$survival_adjustment,
                                                mode = mode,
                                                avg_temp = ..params$avg_temp,
                                                avg_temp_delta = ..params$avg_temp_delta,
@@ -476,6 +477,7 @@ spring_run_model <- function(scenario = NULL,
                                                    CVP_exports = ..params$CVP_exports,
                                                    SWP_exports = ..params$SWP_exports,
                                                    upper_sacramento_flows = ..params$upper_sacramento_flows,
+                                                   san_joaquin_flows = ..params$san_joaquin_flows,
                                                    delta_inflow = ..params$delta_inflow,
                                                    avg_temp_delta = ..params$avg_temp_delta,
                                                    avg_temp = ..params$avg_temp,
@@ -485,6 +487,11 @@ spring_run_model <- function(scenario = NULL,
                                                    .surv_juv_outmigration_san_joaquin_large = ..params$.surv_juv_outmigration_san_joaquin_large,
                                                    min_survival_rate = ..params$min_survival_rate,
                                                    stochastic = stochastic)
+      
+      # check if using EFF, and if so, use the flow-based estimation
+      if(any(..params$san_joaquin_flows > 0)) {
+        migratory_survival$san_joaquin <- migratory_survival$san_joaquin_flow_based
+      }
       
       migrants <- matrix(0, nrow = 31, ncol = 4, dimnames = list(springRunDSM::watershed_labels, springRunDSM::size_class_labels))
       ## TODO check/refactor yearling dynamics
@@ -1147,12 +1154,13 @@ spring_run_model <- function(scenario = NULL,
     
     # distribute returning adults for future spawning
     if (mode == "calibrate") {
-      calculated_adults[1:31, (year + 1):(year + 4)] <- calculated_adults[1:31, (year + 1):(year + 4)] + natural_adults_returning
-      calculated_adults[1:31, (year + 1):(year + 3)] <- calculated_adults[1:31, (year + 1):(year + 3)] + hatchery_adults_returning
-      
+      calculated_adults[1:31, (year + 2):(year + 5)] <- calculated_adults[1:31, (year + 2):(year + 5)] + natural_adults_returning
+      calculated_adults[1:31, (year + 2):(year + 4)] <- calculated_adults[1:31, (year + 2):(year + 4)] + hatchery_adults_returning
+      calculated_adults[is.na(calculated_adults)] = 0
     } else {
-      adults[1:31, (year + 1):(year + 4)] <- adults[1:31, (year + 1):(year + 4)] + natural_adults_returning
-      adults[1:31, (year + 1):(year + 3)] <- adults[1:31, (year + 1):(year + 3)] + hatchery_adults_returning
+      adults[1:31, (year + 2):(year + 5)] <- adults[1:31, (year + 2):(year + 5)] + natural_adults_returning
+      adults[1:31, (year + 2):(year + 4)] <- adults[1:31, (year + 2):(year + 4)] + hatchery_adults_returning
+      adults[is.na(adults)] = 0
     }
     
     

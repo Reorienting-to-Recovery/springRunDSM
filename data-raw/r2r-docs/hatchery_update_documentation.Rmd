@@ -9,7 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.width=15, fig.height=10)
 library(tidyverse)
 library(lubridate)
-library(fallRunDSM)
+library(springRunDSM)
 ```
 
 # Hatchery Dynamics
@@ -18,7 +18,7 @@ library(fallRunDSM)
 
 The existing SIT DSMs follow the following model logic for hatchery fish:
   
-1)  Each year, if model is run deterministicly, there are 307650 hatchery adults initiated into the model based on (CWT data?). Hatchery adults are split between tribs based on values from `fallRunDSM::hatchery_allocation`
+1)  Each year, if model is run deterministicly, there are 307650 hatchery adults initiated into the model based on (CWT data?). Hatchery adults are split between tribs based on values from `springRunDSM::hatchery_allocation`
 2)  Percent natural is output from model in the `get_spawning_adults()` submodel
 3)  Both natural adults and hatchery adults spawn, all surviving juveniles outmigrate and are carried over to the next year but origin is not tracked.
 
@@ -67,13 +67,13 @@ We assume the current fecundity used in the DSMs (5222) is fecundity for age 3 w
 fecundity_table <- tibble(`Age in Model` = c(2, 2, 3, 3, 4, 4, 5),
                           Origin = c("Wild", "Hatchery",  "Wild",  "Hatchery",  "Wild", "Hatchery", "Wild"), 
                           `Size (cm)` = c(50.9, 48.9, 69.1, 67.1, 83.0, 81.0, 85),
-                          Fecundity = c((fallRunDSM::params$spawn_success_fecundity - ((69.1 - 50.9) * 10 * 7.8)), 
-                                        (fallRunDSM::params$spawn_success_fecundity - ((69.1 - 48.9) * 10 * 7.8)), 
-                                        fallRunDSM::params$spawn_success_fecundity, 
-                                        (fallRunDSM::params$spawn_success_fecundity - ((69.1 -  67.1) * 10 * 7.8)), 
-                                        (fallRunDSM::params$spawn_success_fecundity - ((69.1 - 83.0) * 10 * 7.8)),
-                                        (fallRunDSM::params$spawn_success_fecundity - ((69.1 - 81.0) * 10 * 7.8)),
-                                        (fallRunDSM::params$spawn_success_fecundity - ((69.1 - 85) * 10 * 7.8)))) |> 
+                          Fecundity = c((springRunDSM::params$spawn_success_fecundity - ((69.1 - 50.9) * 10 * 7.8)), 
+                                        (springRunDSM::params$spawn_success_fecundity - ((69.1 - 48.9) * 10 * 7.8)), 
+                                        springRunDSM::params$spawn_success_fecundity, 
+                                        (springRunDSM::params$spawn_success_fecundity - ((69.1 -  67.1) * 10 * 7.8)), 
+                                        (springRunDSM::params$spawn_success_fecundity - ((69.1 - 83.0) * 10 * 7.8)),
+                                        (springRunDSM::params$spawn_success_fecundity - ((69.1 - 81.0) * 10 * 7.8)),
+                                        (springRunDSM::params$spawn_success_fecundity - ((69.1 - 85) * 10 * 7.8)))) |> 
   mutate(Fecundity = round(Fecundity, 0))
 fecundity_by_age <- fecundity_table |> 
   select(age = `Age in Model`, origin = Origin, fecundity = Fecundity) 
@@ -85,7 +85,7 @@ knitr::kable(fecundity_table)
 
 ### Juvenile Hatchery Releases
 
-Hatchery return data comes from the production tragets defined in the California [HSRG](California HSRG: https://swfsc-publications.fisheries.noaa.gov/publications/CR/2012/2012California.pdf)(Pages 65 - 95).
+Hatchery return data comes from the production targets defined in the California [HSRG](California HSRG: https://swfsc-publications.fisheries.noaa.gov/publications/CR/2012/2012California.pdf)(Pages 65 - 95).
 
 Baseline hatchery releases by Tributary are: 
   
@@ -106,15 +106,18 @@ summarized_release <- hatchery_releases |>
   mutate(release_number = ifelse(is.na(release_number), 0, release_number)) 
 
 spring_hatchery_release = matrix(0, nrow = 31, ncol = 4, 
-                                 dimnames = list(fallRunDSM::watershed_labels,
+                                 dimnames = list(springRunDSM::watershed_labels,
                                                  c("s", "m", "l", "xl")))
 
 # populate hatchery release as larger fish based on avg hatchery release data
 spring_hatchery_release[, 3] <- summarized_release$release_number
 
-# convert to list of 20 (one matrix per year) to allow hatchery releases to vary annually
-spring_hatchery_release <- rep(list(spring_hatchery_release), 20)
-names(spring_hatchery_release) <- c(1:20)
+# convert to 3d matrix (one 2D matrix for 20 years) to allow hatchery releases to vary annually
+spring_hatchery_release<- array(rep(spring_hatchery_release, 20), 
+                              c(31, 4, 20),
+                              dimnames = list(springRunDSM::watershed_labels,
+                                              c("s", "m", "l", "xl"),
+                                              1:20))
 
 usethis::use_data(spring_hatchery_release, overwrite = TRUE)
 knitr::kable(hatchery_releases)
