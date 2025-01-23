@@ -30,6 +30,7 @@ reference:
     - surv_juv_outmigration_delta
     - surv_juv_outmigration_sac
     - surv_juv_outmigration_san_joaquin
+    - surv_juv_outmigration_san_joaquin_flow_based
     - surv_juv_rear
     - spawn_success
     - ocean_entry_success
@@ -72,6 +73,7 @@ reference:
     - month_return_proportions
     - natural_adult_removal_rate
     - proportion_hatchery
+    - spring_hatchery_release
     - stray_rate
 
   - title: Wrapper and Helper Functions
@@ -82,6 +84,5 @@ reference:
     - get_habitat
     - get_rearing_survival
     - get_migratory_survival
-    - get_spawning_adults
     - territory_by_size
     - pretty_num
