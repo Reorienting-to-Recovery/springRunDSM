@@ -260,7 +260,7 @@ r_to_r_baseline_params <- list(
   flows_apr_may = DSMflow::hatchery_apr_may_flows$biop_itp_2018_2019,
   
   # multi route
-  movement_hypo_weights = rep(1/8, 8),
+  movement_hypo_weights = c(1, rep(0, 7)), #rep(1/8, 8),
   ..habitat_capacity = 5,
   ..floodplain_capacity = 5
 )
