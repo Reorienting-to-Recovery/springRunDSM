@@ -2,10 +2,8 @@ library(springRunDSM)
 library(tidyverse)
 library(plotly)
 
-new_params <- springRunDSM::r_to_r_baseline_params
-new_params$movement_hypo_weights <- c(1, rep(0, 7))
 r2r_seeds <- springRunDSM::spring_run_model(scenario = NULL, mode = "seed",
-                                            seeds = NULL, ..params = new_params,
+                                            seeds = NULL, ..params = springRunDSM::r_to_r_baseline_params,
                                             delta_surv_inflation = FALSE)
 
 r2r_model_results <- springRunDSM::spring_run_model(mode = "simulate", 
