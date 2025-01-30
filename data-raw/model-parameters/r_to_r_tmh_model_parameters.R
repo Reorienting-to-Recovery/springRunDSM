@@ -229,11 +229,21 @@ r_to_r_tmh_params <- list(
     `Merced River` = x[21],
     `Stanislaus River` = x[21],
     `Tuolumne River` = x[21],
-    `San Joaquin River` = x[21])
+    `San Joaquin River` = x[21]),
   
   # R2R specific metrics
-  #hatchery_release = fallRunDSM::baseline_fall_hatchery_release, #TODO update with renes hatchery numbers and document
-  #hatchery_releases_at_chipps = fallRunDSM::baseline_hatchery_releases_at_chipps #TODO documenat
+  hatchery_release = winterRunDSM::winter_hatchery_release, #TODO update with renes hatchery numbers and document
+  hatchery_release_proportion_bay = winterRunDSM::hatchery_release_proportion_bay, # TODO confirm for winter run
+  fecundity_lookup = winterRunDSM::fecundity_by_age,
+  
+  # Flows for stray 
+  flows_oct_nov = DSMflow::hatchery_oct_nov_flows$biop_itp_2018_2019,
+  flows_apr_may = DSMflow::hatchery_apr_may_flows$biop_itp_2018_2019,
+  
+  # multi route
+  movement_hypo_weights = c(1, rep(0, 7)), # rep(1/8, 8),
+  ..habitat_capacity = 5,
+  ..floodplain_capacity = 5
 )
 
 usethis::use_data(r_to_r_tmh_params, overwrite = TRUE)
