@@ -252,6 +252,7 @@ spring_run_model <- function(scenario = NULL,
     init_adults <- round(spawners$init_adults)
     
     output$spawners[ , year] <- init_adults
+    output$spawners[is.na(output$spawners)] <- 0 # TODO keep?
     # # For use in the r2r metrics ---------------------------------------------
     # TODO fix handling for PHOS on non spawn and 0 fish watersheds
     phos <- ifelse(is.na(1 - spawners$proportion_natural), 0, 1 - spawners$proportion_natural)
