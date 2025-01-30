@@ -79,7 +79,7 @@ spawn_success <- function(escapement,
     dplyr::pull(fecundity)
   
   # calculate hatchery fry
-  hatchery_fry <- rowSums(sweep(total_hatch_spawn * (1 - prob_scour), 2, fecundity_hatch, "*") * egg_to_fry_survival)
+  hatchery_fry <- suppressWarnings(rowSums(sweep(total_hatch_spawn * (1 - prob_scour), 2, fecundity_hatch, "*") * egg_to_fry_survival))
   fry <- natural_fry + hatchery_fry
 
   fry <- if(stochastic) {
