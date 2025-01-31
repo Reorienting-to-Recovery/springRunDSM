@@ -1,4 +1,5 @@
 library(springRunDSM)
+library(R2Rscenario)
 library(tidyverse)
 library(plotly)
 
@@ -7,6 +8,7 @@ r2r_seeds <- springRunDSM::spring_run_model(scenario = NULL, mode = "seed",
                                             delta_surv_inflation = FALSE)
 
 r2r_model_results <- springRunDSM::spring_run_model(mode = "simulate", 
+                                                    scenario = "kitchen_sink",
                                                     ..params = springRunDSM::r_to_r_baseline_params,
                                                     seeds = r2r_seeds,
                                                     delta_surv_inflation = TRUE)
