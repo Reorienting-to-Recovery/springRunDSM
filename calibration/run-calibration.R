@@ -4,14 +4,18 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(readr)
+library(parallel)
+library(doParallel)
+library(DSMscenario) # do we need this?
+library(fallRunDSM) # movement params
 
 source("calibration/fitness.R")
 source("calibration/update-params.R")
 
 params <- DSMCalibrationData::set_synth_years(springRunDSM::r_to_r_baseline_params)
-params$prey_density <- rep("hi", 31)
-params$prey_density_delta <- rep("hi", 2)
-best_previous_solution <- readr::read_rds("calibration/calibration-results-2023.rds")@solution
+# params$prey_density <- rep("hi", 31)
+# params$prey_density_delta <- rep("hi", 2)
+previous_best_soluation <- readr::read_rds("calibration/calibration-results-2023.rds")@solution
 
 # Perform calibration --------------------
 res <- ga(type = "real-valued",
@@ -29,8 +33,8 @@ res <- ga(type = "real-valued",
           popSize = 150,
           maxiter = 10000,
           run = 50,
-          parallel = TRUE,
-          pmutation = .5) # <- remove this argument if wanting to start from zero
+          parallel = TRUE)#,
+         # pmutation = .5) # <- remove this argument if wanting to start from zero
                                                 # its a good idea to start from scractch when doing "annual" calibrations
 
 readr::write_rds(res, paste0("calibration/res-", Sys.Date(), ".rds"))
