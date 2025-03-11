@@ -8,6 +8,7 @@ juvenile_month_dynamic(
   fish,
   year = year,
   month = month,
+  mode,
   rearing_survival = rearing_survival,
   migratory_survival = migratory_survival,
   habitat = habitat,
@@ -17,9 +18,9 @@ juvenile_month_dynamic(
   ic_growth,
   fp_growth,
   delta_growth,
-  filling_fn = fallRunDSM::fill_natal,
+  filling_fn = fill_natal,
   filling_args = NULL,
-  filling_regional_fn = fallRunDSM::fill_regional,
+  filling_regional_fn = fill_regional,
   filling_regional_args = NULL,
   movement_fn = NULL,
   movement_args = NULL,
@@ -32,6 +33,8 @@ juvenile_month_dynamic(
 \item{year}{year}
 
 \item{month}{month}
+
+\item{mode}{mode}
 
 \item{rearing_survival}{rearing survival for year and month}
 

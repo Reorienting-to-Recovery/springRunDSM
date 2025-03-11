@@ -25,9 +25,9 @@ juvenile_month_dynamic <- function(fish, year = year, month = month,
                                    avg_ocean_transition_month = avg_ocean_transition_month,
                                    stochastic = stochastic,
                                    ic_growth, fp_growth, delta_growth,
-                                   filling_fn = fallRunDSM::fill_natal,
+                                   filling_fn = fill_natal,
                                    filling_args = NULL,
-                                   filling_regional_fn = fallRunDSM::fill_regional,
+                                   filling_regional_fn = fill_regional,
                                    filling_regional_args = NULL,
                                    movement_fn = NULL,
                                    movement_args = NULL,
@@ -47,7 +47,7 @@ juvenile_month_dynamic <- function(fish, year = year, month = month,
   juveniles_at_chipps <- fish$juveniles_at_chipps
   adults_in_ocean <- fish$adults_in_ocean
   
-  migrants <- matrix(0, nrow = 31, ncol = 4, dimnames = list(fallRunDSM::watershed_labels, fallRunDSM::size_class_labels))
+  migrants <- matrix(0, nrow = 31, ncol = 4, dimnames = list(springRunDSM::watershed_labels, springRunDSM::size_class_labels))
   
   # yearling logic
   if (month == 5) {

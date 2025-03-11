@@ -559,7 +559,7 @@ spring_run_model <- function(scenario = NULL,
           ic_growth = growth_rates_ic,
           fp_growth = growth_rates_fp,
           delta_growth = growth_rates_delta,
-          movement_fn = fallRunDSM::snow_globe_movement,
+          movement_fn = snow_globe_movement,
           movement_months = 1:2,
           movement_args = list(freeport_flow = ..params$freeport_flows[month, year],
                                vernalis_flow = ..params$vernalis_flows[month, year],
@@ -579,7 +579,7 @@ spring_run_model <- function(scenario = NULL,
           ic_growth = growth_rates_ic,
           fp_growth = growth_rates_fp,
           delta_growth = growth_rates_delta,
-          movement_fn = fallRunDSM::genetic_movement,
+          movement_fn = genetic_movement,
           movement_months = 1:2,
           movement_args = list(p_leave = 0.25, stochastic = stochastic)
         )
@@ -597,7 +597,7 @@ spring_run_model <- function(scenario = NULL,
           ic_growth = growth_rates_ic,
           fp_growth = growth_rates_fp,
           delta_growth = growth_rates_delta,
-          movement_fn = fallRunDSM::temperature_movement,
+          movement_fn = temperature_movement,
           movement_months = 1:2,
           movement_args = list(movement_month = 3, movement_temp = 15, stochastic = stochastic)
         )
@@ -615,11 +615,11 @@ spring_run_model <- function(scenario = NULL,
           ic_growth = growth_rates_ic,
           fp_growth = growth_rates_fp,
           delta_growth = growth_rates_delta,
-          filling_fn = fallRunDSM::fill_natal_dens_depend, # filling using density dependence
+          filling_fn = fill_natal_dens_depend, # filling using density dependence
           filling_args = list(up_to_size_class = 2,
                               ..floodplain_capacity = ..params$..floodplain_capacity,
                               ..habitat_capacity = ..params$..habitat_capacity),
-          filling_regional_fn = fallRunDSM::fill_regional_dens_depend,
+          filling_regional_fn = fill_regional_dens_depend,
           filling_regional_args = list(up_to_size_class = 3, ..floodplain_capacity = ..params$..floodplain_capacity,
                                        ..habitat_capacity = ..params$..habitat_capacity)
         )
@@ -637,13 +637,13 @@ spring_run_model <- function(scenario = NULL,
           ic_growth = growth_rates_ic,
           fp_growth = growth_rates_fp,
           delta_growth = growth_rates_delta,
-          filling_fn = fallRunDSM::fill_natal_dens_depend, # filling using density dependence
+          filling_fn = fill_natal_dens_depend, # filling using density dependence
           filling_args = list(up_to_size_class = 2, ..floodplain_capacity = ..params$..floodplain_capacity,
                               ..habitat_capacity = ..params$..habitat_capacity),
-          filling_regional_fn = fallRunDSM::fill_regional_dens_depend,
+          filling_regional_fn = fill_regional_dens_depend,
           filling_regional_args = list(up_to_size_class = 3, ..floodplain_capacity = ..params$..floodplain_capacity,
                                        ..habitat_capacity = ..params$..habitat_capacity),
-          movement_fn = fallRunDSM::snow_globe_movement,
+          movement_fn = snow_globe_movement,
           movement_months = 1:2,
           movement_args = list(freeport_flow = ..params$freeport_flows[month, year],
                                vernalis_flow = ..params$vernalis_flows[month, year],
@@ -663,13 +663,13 @@ spring_run_model <- function(scenario = NULL,
           ic_growth = growth_rates_ic,
           fp_growth = growth_rates_fp,
           delta_growth = growth_rates_delta,
-          filling_fn = fallRunDSM::fill_natal_dens_depend, # filling using density dependence
+          filling_fn = fill_natal_dens_depend, # filling using density dependence
           filling_args = list(up_to_size_class = 2, ..floodplain_capacity = ..params$..floodplain_capacity,
                               ..habitat_capacity = ..params$..habitat_capacity),
-          filling_regional_fn = fallRunDSM::fill_regional_dens_depend,
+          filling_regional_fn = fill_regional_dens_depend,
           filling_regional_args = list(up_to_size_class = 3, ..floodplain_capacity = ..params$..floodplain_capacity,
                                        ..habitat_capacity = ..params$..habitat_capacity),
-          movement_fn = fallRunDSM::genetic_movement,
+          movement_fn = genetic_movement,
           movement_months = 1:2,
           movement_args = list(p_leave = 0.25, stochastic = stochastic)
         )
@@ -687,13 +687,13 @@ spring_run_model <- function(scenario = NULL,
           ic_growth = growth_rates_ic,
           fp_growth = growth_rates_fp,
           delta_growth = growth_rates_delta,
-          filling_fn = fallRunDSM::fill_natal_dens_depend, # filling using density dependence
+          filling_fn = fill_natal_dens_depend, # filling using density dependence
           filling_args = list(up_to_size_class = 2, ..floodplain_capacity = ..params$..floodplain_capacity,
                               ..habitat_capacity = ..params$..habitat_capacity),
-          filling_regional_fn = fallRunDSM::fill_regional_dens_depend,
+          filling_regional_fn = fill_regional_dens_depend,
           filling_regional_args = list(up_to_size_class = 3, ..floodplain_capacity = ..params$..floodplain_capacity,
                                        ..habitat_capacity = ..params$..habitat_capacity),
-          movement_fn = fallRunDSM::temperature_movement,
+          movement_fn = temperature_movement,
           movement_months = 1:2,
           movement_args = list(movement_month = 3, movement_temp = 15, stochastic = stochastic)
         )
